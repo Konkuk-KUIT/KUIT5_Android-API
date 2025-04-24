@@ -52,7 +52,7 @@ fun RegisterScreen(
                     .height(56.dp)
             ) {
                 Text(
-                    text = "조회하기",
+                    text = "등록하기",
                     modifier = Modifier.align(Alignment.Center),
                     style = typography.semiBold.copy(
                         fontSize = 18.sp
