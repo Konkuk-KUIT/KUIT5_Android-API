@@ -36,11 +36,9 @@ class AnimalViewModel : ViewModel() {
             }
                 .onSuccess { data ->
                     _animalListState.value = data
-                    // 성공 핸들링
                 }
                 .onFailure { error ->
                     Log.e("getTotalAnimalList", error.message ?: "Unknown error")
-                    // 실패 핸들링
                 }
         }
 //            .enqueue(object : Callback<ResponseAnimalListDto> {
@@ -108,7 +106,17 @@ class AnimalViewModel : ViewModel() {
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id)
+            animalService.deleteAnimal(id).runCatching {
+                // TODO : 삭제 함수 호출
+            }.fold(
+                onSuccess = { data ->
+                    // TODO : Data 핸들링
+                },
+                onFailure = { error ->
+                    // TODO : Error Handling
+                }
+
+            )
         }
 //            .enqueue(object : Callback<Unit> {
 //                override fun onResponse(
