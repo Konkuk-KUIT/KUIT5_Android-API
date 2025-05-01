@@ -26,6 +26,9 @@ class AnimalViewModel : ViewModel() {
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
 
+    private val _deleteAnimalState = mutableStateOf<Boolean?>(null)
+    val deleteAnimalState: State<Boolean?> get() = _deleteAnimalState
+
     fun getTotalAnimalList() {
         animalService.getTotalAnimalList()
             .enqueue(object : Callback<ResponseAnimalListDto> {
@@ -83,6 +86,27 @@ class AnimalViewModel : ViewModel() {
 
                 override fun onFailure(call: Call<Unit>, t: Throwable) {
                     Log.e("postAddAnimal", "서버 통신 오류: ${t.message}")
+                }
+            })
+    }
+
+    fun deleteAnimal(id: Int) {
+        animalService.deleteAnimal(id)
+            .enqueue(object : Callback<Unit> {
+                override fun onResponse(
+                    call: Call<Unit>,
+                    response: Response<Unit>
+                ) {
+                    if (response.isSuccessful) {
+                        _deleteAnimalState.value = true
+                    } else {
+                        Log.e("deleteAnimal", "${response.code()} ${response.message()}")
+                        _deleteAnimalState.value = false
+                    }
+                }
+
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    Log.e("deleteAnimal", "서버 통신 오류: ${t.message}")
                 }
             })
     }

@@ -48,8 +48,16 @@ fun DetailScreen(
     val response by viewModel.animalDetailState
     val animalDetail = response?.data
 
+    val deleteAnimal by viewModel.deleteAnimalState
+
     LaunchedEffect(index) {
         viewModel.getAnimalDetail(index)
+    }
+
+    LaunchedEffect(deleteAnimal) {
+        if (deleteAnimal == true) {
+            navigateToBack()
+        }
     }
 
     Box(
@@ -141,7 +149,10 @@ fun DetailScreen(
                         .padding(top = 10.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(colors.red)
-                        .padding(10.dp),
+                        .padding(10.dp)
+                        .clickable {
+                            viewModel.deleteAnimal(index)
+                        },
                 ) {
                     Text(
                         text = "삭제하기",

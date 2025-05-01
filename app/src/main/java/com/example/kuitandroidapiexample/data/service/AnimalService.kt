@@ -5,6 +5,7 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailD
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalListDto
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -21,5 +22,10 @@ interface AnimalService {
     @POST("animals")
     fun postAddAnimal(
         @Body request: RequestAddAnimalDto
+    ) : Call<Unit>
+
+    @DELETE("animals/{id}")
+    fun deleteAnimal(
+        @Path("id") id: Int
     ) : Call<Unit>
 }
