@@ -12,6 +12,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.model.AnimalType
 import com.example.kuitandroidapiexample.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
@@ -30,13 +33,22 @@ import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 @Composable
 fun RegisterScreen(
     padding: PaddingValues,
-    navigateToBack: () -> Unit = {}
+    navigateToBack: () -> Unit = {},
+    viewModel: AnimalViewModel = viewModel()
 ) {
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
+
+    val addAnimal by viewModel.addAnimalState
+
+    LaunchedEffect(addAnimal) {
+        if (addAnimal == true) {
+            navigateToBack()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -103,8 +115,13 @@ fun RegisterScreen(
             ),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                navigateToBack()
-                // TODO : POST API
+                viewModel.addAnimal(
+                    url = url,
+                    name = reporterName,
+                    state = animalType,
+                    breed = "",
+                    address = address
+                )
             }
         ) {
             Text(

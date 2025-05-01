@@ -5,9 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.kuitandroidapiexample.data.ServicePool
+import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalListDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
+import com.example.kuitandroidapiexample.model.AnimalType
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +22,9 @@ class AnimalViewModel : ViewModel() {
 
     private val _animalDetailState = mutableStateOf<ResponseAnimalDetailDto?>(null)
     val animalDetailState: State<ResponseAnimalDetailDto?> get() = _animalDetailState
+
+    private val _addAnimalState = mutableStateOf<Boolean?>(null)
+    val addAnimalState: State<Boolean?> get() = _addAnimalState
 
     fun getTotalAnimalList() {
         animalService.getTotalAnimalList()
@@ -59,5 +64,44 @@ class AnimalViewModel : ViewModel() {
                     Log.e("getAnimalDetail", "서버 통신 오류: ${t.message}")
                 }
             })
+    }
+
+    fun postAddAnimal(request: RequestAddAnimalDto) {
+        animalService.postAddAnimal(request)
+            .enqueue(object: Callback<Unit> {
+                override fun onResponse(
+                    call: Call<Unit>,
+                    response: Response<Unit>
+                ) {
+                    if (response.isSuccessful) {
+                        _addAnimalState.value = true
+                    } else {
+                        Log.e("postAddAnimal", "${response.code()} ${response.message()}")
+                        _addAnimalState.value = false
+                    }
+                }
+
+                override fun onFailure(call: Call<Unit>, t: Throwable) {
+                    Log.e("postAddAnimal", "서버 통신 오류: ${t.message}")
+                }
+            })
+    }
+
+    fun addAnimal(
+        url: String,
+        name: String,
+        state: AnimalType,
+        breed: String,
+        address: String
+    ) {
+        val request = RequestAddAnimalDto(
+            id = 1,
+            url = url,
+            name = name,
+            state = state,
+            breed = breed,
+            address = address
+        )
+        postAddAnimal(request)
     }
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,9 +42,10 @@ fun AnimalItem(
         AsyncImage(
             modifier = Modifier
                 .size(130.dp)
-                .background(colors.blue),
+                .background(colors.gray100),
             model = animalData.url,
-            contentDescription = "동물 사진입니다."
+            contentDescription = "동물 사진입니다.",
+            contentScale = ContentScale.Crop
         )
         Column(
             modifier = Modifier.padding(vertical = 12.dp)
