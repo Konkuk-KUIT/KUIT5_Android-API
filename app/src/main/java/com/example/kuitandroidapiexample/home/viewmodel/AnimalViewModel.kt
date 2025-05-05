@@ -41,94 +41,105 @@ class AnimalViewModel : ViewModel() {
                     _animalListState.value = data
                 }
                 .onFailure { error ->
-                    Log.e("getTotalAnimalList",error.message?:"Unknown error")
+                    Log.e("getTotalAnimalList", error.message ?: "Unknown error")
 
                 }
         }
-            /*.enqueue(object : Callback<ResponseAnimalListDto> {
-                override fun onResponse(
-                    call: Call<ResponseAnimalListDto>,
-                    response: Response<ResponseAnimalListDto>
-                ) {
-                    if (response.isSuccessful) {
-                        _animalListState.value = response.body()
-                    } else {
-                        Log.e("getTotalAnimalList", "${response.code()} ${response.message()}")
-                    }
+        /*.enqueue(object : Callback<ResponseAnimalListDto> {
+            override fun onResponse(
+                call: Call<ResponseAnimalListDto>,
+                response: Response<ResponseAnimalListDto>
+            ) {
+                if (response.isSuccessful) {
+                    _animalListState.value = response.body()
+                } else {
+                    Log.e("getTotalAnimalList", "${response.code()} ${response.message()}")
                 }
+            }
 
-                override fun onFailure(call: Call<ResponseAnimalListDto>, t: Throwable) {
-                    Log.e("getTotalAnimalList", "서버 통신 오류: ${t.message}")
-                }
-            })*/
+            override fun onFailure(call: Call<ResponseAnimalListDto>, t: Throwable) {
+                Log.e("getTotalAnimalList", "서버 통신 오류: ${t.message}")
+            }
+        })*/
     }
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
             animalService.getAnimalDetail(id)
         }
-            /*.enqueue(object : Callback<ResponseAnimalDetailDto> {
-                override fun onResponse(
-                    call: Call<ResponseAnimalDetailDto>,
-                    response: Response<ResponseAnimalDetailDto>
-                ) {
-                    if (response.isSuccessful) {
-                        _animalDetailState.value = response.body()
-                    } else {
-                        Log.e("getAnimalDetail", "${response.code()} ${response.message()}")
-                    }
+        /*.enqueue(object : Callback<ResponseAnimalDetailDto> {
+            override fun onResponse(
+                call: Call<ResponseAnimalDetailDto>,
+                response: Response<ResponseAnimalDetailDto>
+            ) {
+                if (response.isSuccessful) {
+                    _animalDetailState.value = response.body()
+                } else {
+                    Log.e("getAnimalDetail", "${response.code()} ${response.message()}")
                 }
+            }
 
-                override fun onFailure(call: Call<ResponseAnimalDetailDto>, t: Throwable) {
-                    Log.e("getAnimalDetail", "서버 통신 오류: ${t.message}")
-                }
-            })*/
+            override fun onFailure(call: Call<ResponseAnimalDetailDto>, t: Throwable) {
+                Log.e("getAnimalDetail", "서버 통신 오류: ${t.message}")
+            }
+        })*/
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-        animalService.postAddAnimal(request)
-    }
-            /*.enqueue(object: Callback<Unit> {
-                override fun onResponse(
-                    call: Call<Unit>,
-                    response: Response<Unit>
-                ) {
-                    if (response.isSuccessful) {
-                        _addAnimalState.value = true
-                    } else {
-                        Log.e("postAddAnimal", "${response.code()} ${response.message()}")
-                        _addAnimalState.value = false
-                    }
+            animalService.postAddAnimal(request)
+        }
+        /*.enqueue(object: Callback<Unit> {
+            override fun onResponse(
+                call: Call<Unit>,
+                response: Response<Unit>
+            ) {
+                if (response.isSuccessful) {
+                    _addAnimalState.value = true
+                } else {
+                    Log.e("postAddAnimal", "${response.code()} ${response.message()}")
+                    _addAnimalState.value = false
                 }
+            }
 
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Log.e("postAddAnimal", "서버 통신 오류: ${t.message}")
-                }
-            })*/
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Log.e("postAddAnimal", "서버 통신 오류: ${t.message}")
+            }
+        })*/
     }
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-        animalService.deleteAnimal(id)
-    }
-            /*.enqueue(object : Callback<Unit> {
-                override fun onResponse(
-                    call: Call<Unit>,
-                    response: Response<Unit>
-                ) {
-                    if (response.isSuccessful) {
-                        _deleteAnimalState.value = true
-                    } else {
-                        Log.e("deleteAnimal", "${response.code()} ${response.message()}")
-                        _deleteAnimalState.value = false
-                    }
+            animalService.deleteAnimal(id).runCatching {
+
+            }.fold(
+                //TODO:삭제 함수 호출
+                onSuccess = { data ->
+                    //TODO :Data 핸들링
+                },
+                onFailure = { error ->
+                    //TODO : Error Handling
                 }
 
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    Log.e("deleteAnimal", "서버 통신 오류: ${t.message}")
+            )
+        }
+        /*.enqueue(object : Callback<Unit> {
+            override fun onResponse(
+                call: Call<Unit>,
+                response: Response<Unit>
+            ) {
+                if (response.isSuccessful) {
+                    _deleteAnimalState.value = true
+                } else {
+                    Log.e("deleteAnimal", "${response.code()} ${response.message()}")
+                    _deleteAnimalState.value = false
                 }
-            })*/
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                Log.e("deleteAnimal", "서버 통신 오류: ${t.message}")
+            }
+        })*/
     }
 
     fun addAnimal(
