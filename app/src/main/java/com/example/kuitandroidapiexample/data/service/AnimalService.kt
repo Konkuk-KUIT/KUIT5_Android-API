@@ -12,20 +12,20 @@ import retrofit2.http.Path
 
 interface AnimalService {
     @GET("animals")
-    fun getTotalAnimalList() : Call<ResponseAnimalListDto>
+    fun getTotalAnimalList() : ResponseAnimalListDto
 
     @GET("animals/{id}")
     fun getAnimalDetail(
         @Path("id") id: Int
-    ) : Call<ResponseAnimalDetailDto>
+    ) : ResponseAnimalDetailDto
 
     @POST("animals")
     fun postAddAnimal(
         @Body request: RequestAddAnimalDto
-    ) : Call<Unit>
+    )
 
     @DELETE("animals/{id}")
     fun deleteAnimal(
         @Path("id") id: Int
-    ) : Call<Unit>
+    )
 }

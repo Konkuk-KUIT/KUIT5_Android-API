@@ -10,7 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiFactory {
-    private const val BASE_URL: String = BuildConfig.BASE_URL
+    private val BASE_URL: String = BuildConfig.BASE_URL //const 삭제 이유??
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
