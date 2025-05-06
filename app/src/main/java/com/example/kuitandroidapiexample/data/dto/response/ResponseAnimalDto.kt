@@ -3,12 +3,16 @@ package com.example.kuitandroidapiexample.data.dto.response
 import com.example.kuitandroidapiexample.model.AnimalType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.io.Serial
 
 @Serializable
 data class ResponseAnimalListDto(
     @SerialName("data")
     val data: List<ResponseAnimalDto>
 )
+
+
+
 
 @Serializable
 data class ResponseAnimalDto(

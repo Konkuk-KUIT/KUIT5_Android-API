@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.data.service
 
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
+import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalListDto
 import retrofit2.Call
@@ -12,12 +13,12 @@ import retrofit2.http.Path
 
 interface AnimalService {
     @GET("animals")
-    suspend fun getTotalAnimalList() : ResponseAnimalListDto
+    suspend fun getTotalAnimalList() : BaseResponse<List<ResponseAnimalListDto>>
 
     @GET("animals/{id}")
     suspend fun getAnimalDetail(
         @Path("id") id: Int
-    ) : ResponseAnimalDetailDto
+    ) : BaseResponse<List<ResponseAnimalListDto>>
 
     @POST("animals")
     suspend fun postAddAnimal(
