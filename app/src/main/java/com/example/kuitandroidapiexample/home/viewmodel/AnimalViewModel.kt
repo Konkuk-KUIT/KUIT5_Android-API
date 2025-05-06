@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
+import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
+import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.model.AnimalType
 import kotlinx.coroutines.launch
@@ -17,6 +19,9 @@ import retrofit2.Response
 
 class AnimalViewModel : ViewModel() {
     private val animalService: AnimalService by lazy { ServicePool.animalService }
+
+    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
+    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?>get() = _animalListState
 
     private val _animalDetailState = mutableStateOf<ResponseAnimalDetailDto?>(null)
     val animalDetailState: State<ResponseAnimalDetailDto?> get() = _animalDetailState
@@ -29,7 +34,17 @@ class AnimalViewModel : ViewModel() {
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            animalService.getTotalAnimalList()
+            animalService.getTotalAnimalList().runCatching {
+                animalService.getTotalAnimalList()
+            }
+                .onSuccess { data ->
+                    _animalListState.value = data
+
+                }
+                .onFailure { error ->
+                    Log.e("getTotalAnimallist", error.message?:"Unkonwn error") // Nullable한 객체, Null값 처리 해줘야함
+
+                }
         }
     }
 
