@@ -4,6 +4,7 @@ import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
+import com.example.kuitandroidapiexample.data.dto.response.ResponseDeleteAnimalDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -28,5 +29,5 @@ interface AnimalService {
     @DELETE("animals/{id}")
     suspend fun deleteAnimal(
         @Path("id") id: Int
-    ) // : Unit은 안써도 됨
+    ): BaseResponse<ResponseDeleteAnimalDto>
 }
