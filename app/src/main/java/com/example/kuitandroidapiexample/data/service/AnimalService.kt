@@ -19,7 +19,7 @@ interface AnimalService {
     @GET("animals/{id}")
     suspend fun getAnimalDetail(
         @Path("id") id: Int
-    ): BaseResponse<List<ResponseAnimalDetailDto>>
+    ): BaseResponse<ResponseAnimalDetailDto>
 
     @POST("animals")
     suspend fun postAddAnimal(
@@ -29,5 +29,5 @@ interface AnimalService {
     @DELETE("animals/{id}")
     suspend fun deleteAnimal(
         @Path("id") id: Int
-    ): BaseResponse<ResponseDeleteAnimalDto>
+    ): ResponseDeleteAnimalDto
 }
