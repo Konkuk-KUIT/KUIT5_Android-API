@@ -37,13 +37,12 @@ class AnimalViewModel : ViewModel() {
             runCatching {
                 animalService.getTotalAnimalList()
 
-            }.onSuccess { data->
+            }.onSuccess { data ->
                 _animalListState.value = data
                 //성공 핸들림
             }
-                .onFailure {error->
-                    Log.e("getTotalAnimalList",error.message?:"Unkown error")
-
+                .onFailure { error ->
+                    Log.e("getTotalAnimalList", error.message ?: "Unkown error")
                     //실패 핸들링
                 }
         }
@@ -52,14 +51,25 @@ class AnimalViewModel : ViewModel() {
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id)
+            runCatching { animalService.getAnimalDetail(id) }
+                .onSuccess { resp ->
+                    _animalDetailState.value = resp.data
+                }  //첫번째값 반환 데이터 타입 맞추기 위해
+                .onFailure { error -> Log.e("AnimalVM", "") }
         }
 
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request)
+            runCatching { animalService.postAddAnimal(request) }
+                .onSuccess {
+                    _addAnimalState.value = true
+                }
+                .onFailure { error ->
+                    Log.e("AnimalVM", "postAdd failed", error)
+                    _addAnimalState.value = false
+                }
         }
 
     }
@@ -70,15 +80,16 @@ class AnimalViewModel : ViewModel() {
                 //To do :삭제 함수 호출
                 animalService.deleteAnimal(id)
             }.fold(
-                onSuccess = {data->
-                    //Todo : Data 핸들링
+                onSuccess = {
+                    _deleteAnimalState.value = true
                 },
-                onFailure = {data->
-                    //TOdo : Error Handling
+                onFailure = { data ->
+                    Log.e("deleteAnimal", data.message ?: "Unkown error")
+                    _deleteAnimalState.value = false
                 },
 
 
-            )
+                )
         }
 
     }
@@ -99,5 +110,9 @@ class AnimalViewModel : ViewModel() {
             address = address
         )
         postAddAnimal(request)
+    }
+
+    fun resetAddState() {
+        _addAnimalState.value = null
     }
 }
