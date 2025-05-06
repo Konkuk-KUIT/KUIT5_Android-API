@@ -18,7 +18,7 @@ interface AnimalService {
     @GET("animals/{id}")
     suspend fun getAnimalDetail(
         @Path("id") id: Int
-    ) : BaseResponse<ResponseAnimalDto>
+    ) : BaseResponse<ResponseAnimalDetailDto>
 
     @POST("animals")
     suspend fun postAddAnimal(

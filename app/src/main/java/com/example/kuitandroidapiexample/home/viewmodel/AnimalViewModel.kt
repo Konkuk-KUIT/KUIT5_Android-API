@@ -50,27 +50,46 @@ class AnimalViewModel : ViewModel() {
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id)
+            runCatching {
+                animalService.getAnimalDetail(id)
+            }.fold(
+                onSuccess = { data ->
+                    _animalDetailState.value = data.data
+                },
+                onFailure = { error ->
+                    Log.e("getAnimalDetail", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request)
+            runCatching {
+                animalService.postAddAnimal(request)
+            }.fold(
+                onSuccess = {
+                    _addAnimalState.value = true
+                },
+                onFailure = { error ->
+                    _addAnimalState.value = false
+                    Log.e("postAddAnimal", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                //TODO : 삭제 함수 호출
                 animalService.deleteAnimal(id)
             }.fold(
-                onSuccess = {data->
-                    //TODO : Data 핸들링
+                onSuccess = {
+                    _deleteAnimalState.value = true
                 },
-                onFailure = {error->
-                    //TODO : Error 핸들링
+                onFailure = { error ->
+                    _deleteAnimalState.value = false
+                    Log.e("deleteAnimal", error.message ?: "Unknown error")
                 }
             )
         }
