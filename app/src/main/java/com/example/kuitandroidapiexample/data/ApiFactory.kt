@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.data
 
 import com.example.kuitandroidapiexample.BuildConfig
+import com.example.kuitandroidapiexample.BuildConfig.BASE_URL
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -10,7 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiFactory {
-    private val BASE_URL: String = BuildConfig.BASE_URL
+    private const val BASE_URL: String = BuildConfig.BASE_URL
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
