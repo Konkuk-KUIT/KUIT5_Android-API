@@ -4,8 +4,6 @@ import com.example.kuitandroidapiexample.model.AnimalType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
-
 @Serializable
 data class ResponseAnimalDto(
     @SerialName("id")

@@ -1,8 +1,10 @@
 package com.example.kuitandroidapiexample.home.viewmodel
 
 import android.util.Log
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
@@ -23,8 +25,8 @@ class AnimalViewModel : ViewModel() {
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
     val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
 
-    private val _animalDetailState = mutableStateOf<ResponseAnimalDetailDto?>(null)
-    val animalDetailState: State<ResponseAnimalDetailDto?> get() = _animalDetailState
+    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
+    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
 
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
@@ -50,28 +52,44 @@ class AnimalViewModel : ViewModel() {
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id)
+            runCatching {
+                animalService.getAnimalDetail(id)
+            }
+                .onSuccess { data ->
+                    _animalDetailState.value = data
+                }
+                .onFailure { error ->
+                    Log.e("getAnimalDetail", error.message ?: "Unknown error")
+                }
         }
-
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request)
+            runCatching {
+                animalService.postAddAnimal(request)
+            }
+                .onSuccess {
+                    _addAnimalState.value=true
+                }
+                .onFailure { error ->
+                    _addAnimalState.value=false
+                    Log.e("postAddAnimal", error.message ?: "Unknown error")
+                }
         }
-
     }
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                //TODO: 삭제 함수 호출
                 animalService.deleteAnimal(id)
             }.fold(
-                onSuccess = { data ->
-
+                onSuccess = {
+                    _deleteAnimalState.value=true
                 },
                 onFailure = { error ->
+                    _deleteAnimalState.value=false
+                    Log.e("deleteAnimal", error.message ?: "Unknown error")
                 }
 
             )
