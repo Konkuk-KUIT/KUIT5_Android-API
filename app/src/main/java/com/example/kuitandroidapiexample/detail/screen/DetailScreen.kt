@@ -46,7 +46,7 @@ fun DetailScreen(
     viewModel: AnimalViewModel = viewModel()
 ) {
     val response by viewModel.animalDetailState
-    val animalDetail = response?.data
+    val animalDetail = response
 
     val deleteAnimal by viewModel.deleteAnimalState
 
