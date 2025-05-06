@@ -4,7 +4,6 @@ import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalListDto
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
