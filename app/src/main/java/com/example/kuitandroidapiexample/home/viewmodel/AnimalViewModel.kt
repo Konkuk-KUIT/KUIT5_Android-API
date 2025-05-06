@@ -62,7 +62,16 @@ class AnimalViewModel : ViewModel() {
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id)
+            animalService.deleteAnimal(id).runCatching {
+                //TODO : 삭제 함수 호출
+            }.fold(
+                onSuccess = {data->
+                    //TODO : Data 핸들링
+                },
+                onFailure = {error->
+                    //TODO : Error 핸들링
+                }
+            )
         }
     }
 
