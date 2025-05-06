@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.home.viewmodel
 
+import android.R.attr.data
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -43,19 +44,46 @@ class AnimalViewModel : ViewModel() {
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id)
+            animalService.getAnimalDetail(id).runCatching {
+                animalService.getAnimalDetail(id)
+            }.fold(
+                onSuccess = { data ->
+                    _animalDetailState.value = data.data
+                },
+                onFailure = { error ->
+                    Log.e("getAnimalDetail", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request)
+            animalService.postAddAnimal(request).runCatching {
+                animalService.postAddAnimal(request)
+            }.fold(
+                onSuccess = {
+                    Log.d("postAddAnimal", "등록 성공")
+                },
+                onFailure = { error ->
+                    Log.e("postAddAnimal", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id)
+            animalService.deleteAnimal(id).runCatching {
+                animalService.deleteAnimal(id)
+            }.fold(
+                onSuccess = { response ->
+                    Log.d("deleteAnimal", "삭제 성공. ID: ${response.data.id}, message: ${response.message}")
+                },
+                onFailure = { error ->
+                    Log.e("deleteAnimal", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 
