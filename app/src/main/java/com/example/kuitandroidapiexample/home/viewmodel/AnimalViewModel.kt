@@ -34,7 +34,7 @@ class AnimalViewModel : ViewModel() {
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            animalService.getTotalAnimalList().runCatching {
+            runCatching {
                 animalService.getTotalAnimalList()
             }
                 .onSuccess { data ->
@@ -62,8 +62,9 @@ class AnimalViewModel : ViewModel() {
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id).runCatching {
+            runCatching {
                 //TODO : 삭제 함수 호출
+                animalService.deleteAnimal(id)
             }.fold(
                 onSuccess = {data->
                     //TODO : Data 핸들링
