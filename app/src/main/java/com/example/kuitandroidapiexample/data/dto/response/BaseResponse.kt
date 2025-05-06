@@ -8,5 +8,4 @@ import kotlinx.serialization.Serializable
 data class BaseResponse<T>(
     @SerialName("data")
     val data: T
-
 )

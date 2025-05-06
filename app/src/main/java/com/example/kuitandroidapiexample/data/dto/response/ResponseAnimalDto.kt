@@ -5,14 +5,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.io.Serial
 
-@Serializable
+/*@Serializable
 data class ResponseAnimalListDto(
     @SerialName("data")
     val data: List<ResponseAnimalDto>
-)
-
-
-
+)*/
 
 @Serializable
 data class ResponseAnimalDto(
