@@ -60,6 +60,7 @@ class AnimalViewModel : ViewModel() {
 
     }
 
+
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
             runCatching { animalService.postAddAnimal(request) }
