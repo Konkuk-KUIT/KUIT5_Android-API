@@ -36,6 +36,7 @@ import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
@@ -61,22 +62,16 @@ fun RegisterScreen(
     LaunchedEffect(addAnimal) {
         if (addAnimal == true) {
             cScope.launch {
+
                 val result = snackBarHost.showSnackbar(
                     message = "등록이 완료되었습니다.",
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-                when (result) {
-                    SnackbarResult.Dismissed -> {
 
-                    }
-
-                    SnackbarResult.ActionPerformed -> {
-
-                    }
-                }
                 navigateToBack()
             }
+
 
         }
     }
@@ -147,11 +142,14 @@ fun RegisterScreen(
             Text(
                 text = "등록하기", style = typography.semiBold.copy(fontSize = 18.sp)
             )
-            SnackbarHost(
-                hostState = snackBarHost,
-            )
+
 
         }
+
+        SnackbarHost(
+            hostState = snackBarHost,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
 }
