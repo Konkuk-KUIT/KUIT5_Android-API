@@ -1,6 +1,5 @@
 package com.example.kuitandroidapiexample.home.viewmodel
 
-import android.R.attr.data
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +31,7 @@ class AnimalViewModel : ViewModel() {
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            animalService.getTotalAnimalList().runCatching {
+            runCatching {
                 animalService.getTotalAnimalList()
             }.onSuccess { data ->
                 _animalListState.value = data
@@ -44,7 +43,7 @@ class AnimalViewModel : ViewModel() {
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id).runCatching {
+            runCatching {
                 animalService.getAnimalDetail(id)
             }.fold(
                 onSuccess = { data ->
@@ -59,7 +58,7 @@ class AnimalViewModel : ViewModel() {
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request).runCatching {
+            runCatching {
                 animalService.postAddAnimal(request)
             }.fold(
                 onSuccess = {
@@ -74,7 +73,7 @@ class AnimalViewModel : ViewModel() {
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id).runCatching {
+            runCatching {
                 animalService.deleteAnimal(id)
             }.fold(
                 onSuccess = { response ->
