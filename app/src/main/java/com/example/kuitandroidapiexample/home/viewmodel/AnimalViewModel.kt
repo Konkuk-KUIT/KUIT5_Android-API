@@ -63,9 +63,11 @@ class AnimalViewModel : ViewModel() {
             }.fold(
                 onSuccess = {
                     Log.d("postAddAnimal", "등록 성공")
+                    _addAnimalState.value = true
                 },
                 onFailure = { error ->
                     Log.e("postAddAnimal", error.message ?: "Unknown error")
+                    _addAnimalState.value = false
                 }
             )
         }
