@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +35,7 @@ import com.example.kuitandroidapiexample.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
@@ -46,21 +48,42 @@ fun RegisterScreen(
     var address by remember { mutableStateOf("") }
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
-
+// 5주차 상태 다 입력
     val addResult by viewModel.addAnimalState
 
 
     val snackbarHostState = remember { SnackbarHostState() }
-
+    val scope = rememberCoroutineScope()
     LaunchedEffect(addResult) {
-        if (addResult == true) {
-            snackbarHostState.showSnackbar(
-                message = "등록이 완료되었습니다",
-                duration = SnackbarDuration.Short
-            )
-           viewModel.resetAddState()
-            navigateToBack()
+        when (addResult) {
+            true -> {
+                scope.launch {
+                    val result = snackbarHostState.showSnackbar(
+                        message = "등록이 완료되었습니다",
+                        duration = SnackbarDuration.Short
+                    )
+                    if (result == SnackbarResult.Dismissed) {
 
+                        navigateToBack()
+                    }
+
+                }
+            }
+
+            false -> {
+                // 실패
+                scope.launch {
+                   val result= snackbarHostState.showSnackbar(
+                        message = "등록에 실패했습니다",
+                        duration = SnackbarDuration.Short
+                    )
+                    if (result == SnackbarResult.Dismissed) {
+                        navigateToBack()
+                    }
+                }
+            }
+
+            null -> {}
         }
     }
     Scaffold(

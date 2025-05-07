@@ -156,6 +156,7 @@ fun DetailScreen(
                         .padding(10.dp)
                         .clickable {
                             viewModel.deleteAnimal(index)
+                            navigateToBack()
                         },
                 ) {
                     Text(
