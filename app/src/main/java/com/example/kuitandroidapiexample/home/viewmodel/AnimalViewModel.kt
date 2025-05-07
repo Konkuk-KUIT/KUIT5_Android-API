@@ -13,6 +13,7 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailD
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.model.AnimalType
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,7 +63,7 @@ class AnimalViewModel : ViewModel() {
             runCatching {
                 animalService.postAddAnimal(request)
             }.onSuccess { data ->
-
+                _addAnimalState.value = true
             }.onFailure { error ->
                 Log.e("postAddAnimal", error.message ?: "Unknown error")
             }
@@ -71,9 +72,11 @@ class AnimalViewModel : ViewModel() {
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            runCatching { }.fold(
+            runCatching {
+                animalService.deleteAnimal(id)
+            }.fold(
                 onSuccess = { data ->
-
+                    _deleteAnimalState.value = true
                 },
                 onFailure = { error ->
                     Log.e("deleteAnimal", error.message ?: "Unknown error")
