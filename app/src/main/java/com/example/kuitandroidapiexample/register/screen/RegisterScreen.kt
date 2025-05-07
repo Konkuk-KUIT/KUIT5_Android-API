@@ -63,7 +63,6 @@ fun RegisterScreen(
                         duration = SnackbarDuration.Short
                     )
                     if (result == SnackbarResult.Dismissed) {
-
                         navigateToBack()
                     }
 
