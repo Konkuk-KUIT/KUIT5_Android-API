@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.home.viewmodel
+package com.example.kuitandroidapiexample.ui.home.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.State
@@ -11,7 +11,7 @@ import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
-import com.example.kuitandroidapiexample.model.AnimalType
+import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
 
 class AnimalViewModel : ViewModel() {

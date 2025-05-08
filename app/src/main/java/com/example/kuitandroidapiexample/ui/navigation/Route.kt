@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.navigation
+package com.example.kuitandroidapiexample.ui.navigation
 
 import kotlinx.serialization.Serializable
 
