@@ -6,4 +6,6 @@ class AnimalRepository(
     private val animalService: AnimalService
 ) {
     suspend fun getAnimal(id: Int) = runCatching { animalService.getAnimalDetail(id) }
+
+    suspend fun deleteAnimal(id: Int) = runCatching { animalService.deleteAnimal(id) }
 }

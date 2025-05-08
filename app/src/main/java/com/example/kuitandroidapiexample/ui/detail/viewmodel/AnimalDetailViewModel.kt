@@ -9,6 +9,7 @@ import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AnimalDetailViewModel(
@@ -23,6 +24,21 @@ class AnimalDetailViewModel(
             animalRepository.getAnimal(id).fold(
                 onSuccess = { data ->
                     _uiState.value = data.data.toUiState()
+                },
+                onFailure = { error ->
+                    Log.e("okhttpError", error.message.toString())
+                }
+            )
+        }
+    }
+
+    fun deleteAnimal(id: Int) {
+        viewModelScope.launch {
+            animalRepository.deleteAnimal(id).fold(
+                onSuccess = {
+                    _uiState.update {
+                        it.copy(isDelete = true)
+                    }
                 },
                 onFailure = { error ->
                     Log.e("okhttpError", error.message.toString())
