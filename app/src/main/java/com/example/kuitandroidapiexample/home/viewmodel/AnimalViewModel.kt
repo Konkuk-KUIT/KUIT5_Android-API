@@ -21,8 +21,8 @@ class AnimalViewModel : ViewModel() {
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
     val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
 
-    private val _animalDetailState = mutableStateOf<ResponseAnimalDetailDto?>(null)
-    val animalDetailState: State<ResponseAnimalDetailDto?> get() = _animalDetailState
+    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
+    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
 
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
@@ -32,103 +32,56 @@ class AnimalViewModel : ViewModel() {
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            animalService.getTotalAnimalList().runCatching { //런캐칭함수는 마지막값을 Result에 섞어서 리턴
+            runCatching {
                 animalService.getTotalAnimalList()
+            }.onSuccess { data ->
+                _animalListState.value = data
+            }.onFailure { error ->
+                Log.e("getTotalAnimalList", "실패 원인: ${error.localizedMessage}", error)
             }
-                .onSuccess { data ->
-                    _animalListState.value = data
-
-                } //성공핸들링
-                .onFailure { error ->
-                    Log.e("getTotalAnimalList", error.message ?: "Unknown error")
-
-
-                } //실패핸들링
         }
-//            .enqueue(object : Callback<ResponseAnimalListDto> {
-//                override fun onResponse(
-//                    call: Call<ResponseAnimalListDto>,
-//                    response: Response<ResponseAnimalListDto>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        _animalListState.value = response.body()
-//                    } else {
-//                        Log.e("getTotalAnimalList", "${response.code()} ${response.message()}")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ResponseAnimalListDto>, t: Throwable) {
-//                    Log.e("getTotalAnimalList", "서버 통신 오류: ${t.message}")
-//                }
-//            })
     }
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalService.getAnimalDetail(id)
+            runCatching {
+                animalService.getAnimalDetail(id)
+            }.onSuccess { data ->
+                _animalDetailState.value = data
+            }.onFailure { error ->
+                Log.e("getAnimalDetail", error.message ?: "Unknown error")
+            }
         }
-//            .enqueue(object : Callback<ResponseAnimalDetailDto> {
-//                override fun onResponse(
-//                    call: Call<ResponseAnimalDetailDto>,
-//                    response: Response<ResponseAnimalDetailDto>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        _animalDetailState.value = response.body()
-//                    } else {
-//                        Log.e("getAnimalDetail", "${response.code()} ${response.message()}")
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<ResponseAnimalDetailDto>, t: Throwable) {
-//                    Log.e("getAnimalDetail", "서버 통신 오류: ${t.message}")
-//                }
-//            })
     }
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
-            animalService.postAddAnimal(request)
+            runCatching {
+                animalService.postAddAnimal(request)
+            }.onSuccess {
+                _addAnimalState.value = true
+            }.onFailure { error ->
+                _addAnimalState.value = false
+                Log.e("postAddAnimal", error.message ?: "Unknown error")
+            }
         }
-//            .enqueue(object: Callback<Unit> {
-//                override fun onResponse(
-//                    call: Call<Unit>,
-//                    response: Response<Unit>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        _addAnimalState.value = true
-//                    } else {
-//                        Log.e("postAddAnimal", "${response.code()} ${response.message()}")
-//                        _addAnimalState.value = false
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Unit>, t: Throwable) {
-//                    Log.e("postAddAnimal", "서버 통신 오류: ${t.message}")
-//                }
-//            })
     }
 
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
-            animalService.deleteAnimal(id)
+            runCatching {
+                animalService.deleteAnimal(id)
+                // TODO: 삭제함수호출
+            }.fold(
+                onSuccess = { data -> // TODO: Data 핸들링
+                    _deleteAnimalState.value = true
+                },
+                onFailure = { error -> // TODO: Error 핸들링
+                    _deleteAnimalState.value = false
+                    Log.e("deleteAnimal", error.message ?: "Unknown error")
+                }
+            )
         }
-//            .enqueue(object : Callback<Unit> {
-//                override fun onResponse(
-//                    call: Call<Unit>,
-//                    response: Response<Unit>
-//                ) {
-//                    if (response.isSuccessful) {
-//                        _deleteAnimalState.value = true
-//                    } else {
-//                        Log.e("deleteAnimal", "${response.code()} ${response.message()}")
-//                        _deleteAnimalState.value = false
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<Unit>, t: Throwable) {
-//                    Log.e("deleteAnimal", "서버 통신 오류: ${t.message}")
-//                }
-//            })
     }
 
     fun addAnimal(
