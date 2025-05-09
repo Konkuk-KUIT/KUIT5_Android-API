@@ -35,9 +35,7 @@ import com.example.kuitandroidapiexample.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun RegisterScreen(
@@ -53,17 +51,31 @@ fun RegisterScreen(
 
     val addAnimal by viewModel.addAnimalState
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(addAnimal) {
         if (addAnimal == true) {
-            val result = snackbarHostState.showSnackbar(
-                message = "$animalName 등록 완료",
-                duration = SnackbarDuration.Short,
-                withDismissAction = true
-            )
-            if (result == SnackbarResult.Dismissed) {
-                navigateToBack()
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(
+                    message = "$animalName 등록 완료",
+                    duration = SnackbarDuration.Short,
+                    withDismissAction = true
+                )
+                if (result == SnackbarResult.Dismissed) {
+                    navigateToBack()
+                }
             }
+//            scope.launch {
+//                val job = launch {
+//                    snackbarHostState.showSnackbar(
+//                        message = "$animalName 등록 완료",
+//                        withDismissAction = true
+//                    )
+//                }
+//                delay(1000L)
+//                job.cancel()
+//                navigateToBack()
+//            }
         }
     }
 

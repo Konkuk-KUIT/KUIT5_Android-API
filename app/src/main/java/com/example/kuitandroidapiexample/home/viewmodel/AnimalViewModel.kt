@@ -1,10 +1,8 @@
 package com.example.kuitandroidapiexample.home.viewmodel
 
 import android.util.Log
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
@@ -15,9 +13,6 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.model.AnimalType
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AnimalViewModel : ViewModel() {
     private val animalService: AnimalService by lazy { ServicePool.animalService }
@@ -70,10 +65,10 @@ class AnimalViewModel : ViewModel() {
                 animalService.postAddAnimal(request)
             }
                 .onSuccess {
-                    _addAnimalState.value=true
+                    _addAnimalState.value = true
                 }
                 .onFailure { error ->
-                    _addAnimalState.value=false
+                    _addAnimalState.value = false
                     Log.e("postAddAnimal", error.message ?: "Unknown error")
                 }
         }
@@ -85,10 +80,10 @@ class AnimalViewModel : ViewModel() {
                 animalService.deleteAnimal(id)
             }.fold(
                 onSuccess = {
-                    _deleteAnimalState.value=true
+                    _deleteAnimalState.value = true
                 },
                 onFailure = { error ->
-                    _deleteAnimalState.value=false
+                    _deleteAnimalState.value = false
                     Log.e("deleteAnimal", error.message ?: "Unknown error")
                 }
 
