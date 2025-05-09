@@ -70,6 +70,11 @@ fun HomeScreen(
                     )
                 )
             }
+
+
+
+
+
             LazyColumn(
                 state = lazyState,
                 contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp),

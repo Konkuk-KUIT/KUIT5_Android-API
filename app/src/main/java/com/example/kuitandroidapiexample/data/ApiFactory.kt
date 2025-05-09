@@ -10,7 +10,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiFactory {
-    private const val BASE_URL: String = BuildConfig.BASE_URL
+    private const val BASE_URL = "https://jhr75t9q8d.execute-api.ap-northeast-2.amazonaws.com/dev/"
+    // 실행이 안돼서 url 넣음
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
