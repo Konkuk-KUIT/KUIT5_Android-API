@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.register.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,8 +9,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,16 +34,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.model.AnimalType
-import com.example.kuitandroidapiexample.register.componet.FindUTextField
-import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.register.component.FindUTextField
+import com.example.kuitandroidapiexample.register.component.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
+import kotlinx.coroutines.delay
 
 @Composable
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalViewModel = viewModel(),
 ) {
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
@@ -43,98 +53,114 @@ fun RegisterScreen(
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
     val addAnimal by viewModel.addAnimalState
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(addAnimal) {
         if (addAnimal == true) {
+            val result = snackbarHostState.showSnackbar(
+                message = "등록이 완료되었습니다.",
+                actionLabel = "X"
+            )
+            if(result == SnackbarResult.ActionPerformed){
+                navigateToBack()
+            }
+            delay(1000L)
+            viewModel.resetAddAnimal()
             navigateToBack()
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding)
-    ) {
-        Column(
-            modifier = Modifier.matchParentSize()
+    Scaffold(
+        modifier=Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ) {innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(innerPadding)
         ) {
-            Box(
+            Column(
+                modifier = Modifier.matchParentSize()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                ) {
+                    Text(
+                        text = "등록하기",
+                        modifier = Modifier.align(Alignment.Center),
+                        style = typography.semiBold.copy(
+                            fontSize = 18.sp
+                        )
+                    )
+                }
+
+                FindUTextField(
+                    modifier = Modifier.padding(top = 21.dp),
+                    title = "사진 url 입력",
+                    value = url
+                ) { url = it }
+
+                FindUTextField(
+                    modifier = Modifier.padding(top = 15.dp),
+                    title = "이름 입력",
+                    value = reporterName
+                ) { reporterName = it }
+
+                FindUTextField(
+                    modifier = Modifier.padding(top = 15.dp),
+                    title = "주소 입력",
+                    value = address
+                ) { address = it }
+
+                FindUTextField(
+                    modifier = Modifier.padding(top = 15.dp),
+                    title = "동물 이름",
+                    value = animalName
+                ) { animalName = it }
+
+                TypeSelectContent(
+                    modifier = Modifier.padding(start = 16.dp, top = 30.dp),
+                    animalType = animalType
+                ) { animalType = it }
+
+            }
+
+            Button(
                 modifier = Modifier
+                    .padding(bottom = 50.dp)
+                    .padding(horizontal = 20.dp)
                     .fillMaxWidth()
-                    .height(56.dp)
+                    .height(50.dp)
+                    .align(Alignment.BottomCenter),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colors.orange
+                ),
+                shape = RoundedCornerShape(8.dp),
+                onClick = {
+                    viewModel.addAnimal(
+                        url = url,
+                        name = reporterName,
+                        state = animalType,
+                        breed = "",
+                        address = address
+                    )
+                }
             ) {
                 Text(
                     text = "등록하기",
-                    modifier = Modifier.align(Alignment.Center),
-                    style = typography.semiBold.copy(
-                        fontSize = 18.sp
-                    )
+                    style = typography.semiBold.copy(fontSize = 18.sp)
                 )
             }
-
-            FindUTextField(
-                modifier = Modifier.padding(top = 21.dp),
-                title = "사진 url 입력",
-                value = url
-            ) { url = it }
-
-            FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "이름 입력",
-                value = reporterName
-            ) { reporterName = it }
-
-            FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "주소 입력",
-                value = address
-            ) { address = it }
-
-            FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "동물 이름",
-                value = animalName
-            ) { animalName = it }
-
-            TypeSelectContent(
-                modifier = Modifier.padding(start = 16.dp, top = 30.dp),
-                animalType = animalType
-            ) { animalType = it }
-
-        }
-
-        Button(
-            modifier = Modifier
-                .padding(bottom = 50.dp)
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .height(50.dp)
-                .align(Alignment.BottomCenter),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = colors.orange
-            ),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {
-                viewModel.addAnimal(
-                    url = url,
-                    name = reporterName,
-                    state = animalType,
-                    breed = "",
-                    address = address
-                )
-            }
-        ) {
-            Text(
-                text = "등록하기",
-                style = typography.semiBold.copy(fontSize = 18.sp)
-            )
         }
     }
-
 }
-
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
-    RegisterScreen(padding = PaddingValues())
+    RegisterScreen(
+        padding = PaddingValues()
+    )
 }

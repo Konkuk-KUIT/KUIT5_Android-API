@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.register.componet
+package com.example.kuitandroidapiexample.register.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -65,5 +65,7 @@ private fun TypeRadioButton(
 private fun TypeSelectContentPreview() {
     TypeSelectContent(
         animalType = AnimalType.PROTECT
-    ) {}
+    ) {
+
+    }
 }

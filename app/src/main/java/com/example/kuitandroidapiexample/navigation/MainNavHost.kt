@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +13,7 @@ import com.example.kuitandroidapiexample.register.screen.RegisterScreen
 
 @Composable
 fun MainNavHost(
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     val navController = rememberNavController()
 
@@ -33,12 +34,10 @@ fun MainNavHost(
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() }
-
             )
         }
         composable<Route.Detail> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Route.Detail>()
-
             DetailScreen(
                 padding = padding,
                 index = args.index,
@@ -46,5 +45,4 @@ fun MainNavHost(
             )
         }
     }
-
 }
