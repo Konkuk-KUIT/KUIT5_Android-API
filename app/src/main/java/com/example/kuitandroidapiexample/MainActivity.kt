@@ -9,7 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.example.kuitandroidapiexample.navigation.MainNavHost
+import com.example.kuitandroidapiexample.ui.navigation.MainNavHost
 import com.example.kuitandroidapiexample.ui.theme.KuitAndroidApiExampleTheme
 
 class MainActivity : ComponentActivity() {
