@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
@@ -41,13 +42,9 @@ fun HomeScreen(
     navigateToDetail: (Int) -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
+    viewModel.getTotalAnimalList()
     val lazyState = rememberLazyListState()
-    val response by viewModel.animalListState
-    val animals = response?.data.orEmpty()
-
-    LaunchedEffect(Unit) {
-        viewModel.getTotalAnimalList()
-    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Box(
         modifier = Modifier
@@ -75,7 +72,7 @@ fun HomeScreen(
                 contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(animals) { animal ->
+                items(uiState.animalList) { animal ->
                     AnimalItem(
                         animalData = animal,
                         navigateToDetail = { navigateToDetail(animal.id) }

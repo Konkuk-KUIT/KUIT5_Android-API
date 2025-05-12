@@ -1,12 +1,13 @@
 package com.example.kuitandroidapiexample.ui.detail.viewmodel
 
+import android.R.attr.data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
-import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
+import com.example.kuitandroidapiexample.ui.mapper.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,8 +23,8 @@ class AnimalDetailViewModel(
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
             animalRepository.getAnimal(id).fold(
-                onSuccess = { data ->
-                    _uiState.value = data.data.toUiState()
+                onSuccess = { it ->
+                    _uiState.value = it.data.toUiState()
                 },
                 onFailure = { error ->
                     Log.e("okhttpError", error.message.toString())

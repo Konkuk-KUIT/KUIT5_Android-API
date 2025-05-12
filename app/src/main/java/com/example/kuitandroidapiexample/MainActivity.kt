@@ -16,6 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             KuitAndroidApiExampleTheme {
+
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     MainNavHost(padding = innerPadding)
                 }

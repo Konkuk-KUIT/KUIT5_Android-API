@@ -26,11 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.launch
@@ -39,34 +41,24 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: RegisterViewModel = viewModel()
 ) {
-    var url by remember { mutableStateOf("") }
-    var animalName by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var reporterName by remember { mutableStateOf("") }
-    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
-
-    val addAnimal by viewModel.addAnimalState
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHost = remember { SnackbarHostState() }
-    val cScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
 
 
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
-            cScope.launch {
-
+    LaunchedEffect(uiState.isAdded) {
+        if (uiState.isAdded == true) {
+            scope.launch {
                 val result = snackBarHost.showSnackbar(
                     message = "등록이 완료되었습니다.",
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-
                 navigateToBack()
             }
-
-
         }
     }
 
@@ -93,24 +85,33 @@ fun RegisterScreen(
             }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = url
-            ) { url = it }
+                modifier = Modifier.padding(top = 21.dp),
+                title = "사진 url 입력",
+                value = uiState.url
+            ) { viewModel.updateUrl(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = reporterName
-            ) { reporterName = it }
+                modifier = Modifier.padding(top = 15.dp),
+                title = "이름 입력",
+                value = uiState.name
+            ) { viewModel.updateName(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = address
-            ) { address = it }
+                modifier = Modifier.padding(top = 15.dp),
+                title = "주소 입력",
+                value = uiState.address
+            ) { viewModel.updateAddress(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = animalName
-            ) { animalName = it }
+                modifier = Modifier.padding(top = 15.dp),
+                title = "동물 이름",
+                value = uiState.breed
+            ) { viewModel.updateBreed(it) }
 
             TypeSelectContent(
-                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = animalType
-            ) { animalType = it }
+                modifier = Modifier.padding(start = 16.dp, top = 30.dp),
+                animalType = uiState.type
+            ) { viewModel.updateType(it) }
 
         }
 
@@ -123,21 +124,11 @@ fun RegisterScreen(
                 .align(Alignment.BottomCenter), colors = ButtonDefaults.buttonColors(
                 containerColor = colors.orange
             ), shape = RoundedCornerShape(8.dp), onClick = {
-                viewModel.addAnimal(
-                    url = url,
-                    name = reporterName,
-                    state = animalType,
-                    breed = "",
-                    address = address
-                )
-
-
+                viewModel.registerAnimal()
             }) {
             Text(
                 text = "등록하기", style = typography.semiBold.copy(fontSize = 18.sp)
             )
-
-
         }
 
         SnackbarHost(
