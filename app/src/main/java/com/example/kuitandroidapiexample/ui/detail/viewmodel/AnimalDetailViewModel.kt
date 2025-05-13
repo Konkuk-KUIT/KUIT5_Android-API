@@ -4,11 +4,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.kuitandroidapiexample.data.ServicePool.animalService
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AnimalDetailViewModel(
@@ -17,7 +19,7 @@ class AnimalDetailViewModel(
     private val _uiState = MutableStateFlow(AnimalDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    private fun getAnimalDetail(id: Int) {
+    fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
             animalRepository.getAnimal(id).fold(
                 onSuccess = { data ->
@@ -29,9 +31,25 @@ class AnimalDetailViewModel(
             )
         }
     }
+
+    fun deleteAnimal(id: Int) {
+        viewModelScope.launch {
+            runCatching {
+                animalService.deleteAnimal(id)
+            }.fold(
+                onSuccess = {
+                    _uiState.update {
+                        it.copy(isDelete = true)
+                    }
+                },
+                onFailure = { error ->
+                    Log.e("deleteAnimal", error.message ?: "Unknown error")
+                })
+        }
+    }
 }
 
-class AnimalViewModelFactory(
+class AnimalDetailViewModelFactory(
     private val animalRepository: AnimalRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
