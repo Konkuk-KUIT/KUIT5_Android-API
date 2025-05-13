@@ -2,12 +2,17 @@ package com.example.kuitandroidapiexample.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.kuitandroidapiexample.App
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
 
 @Composable
@@ -15,6 +20,12 @@ fun MainNavHost(
     padding: PaddingValues
 ) {
     val navController = rememberNavController()
+
+    val context = LocalContext.current.applicationContext as App
+    val viewModel: AnimalViewModel = viewModel(
+        factory = AnimalViewModelFactory(context.appContainer.provideApiService())
+    )
+
 
     NavHost(
         navController = navController,
@@ -26,13 +37,15 @@ fun MainNavHost(
                 navigateToRegister = { navController.navigate(Route.Register) },
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
-                }
+                },
+                viewModel = viewModel
             )
         }
         composable<Route.Register> {
             RegisterScreen(
                 padding = padding,
-                navigateToBack = { navController.navigateUp() }
+                navigateToBack = { navController.navigateUp() },
+                viewModel = viewModel
 
             )
         }
@@ -42,7 +55,9 @@ fun MainNavHost(
             DetailScreen(
                 padding = padding,
                 index = args.index,
-                navigateToBack = { navController.navigateUp() }
+                navigateToBack = { navController.navigateUp() },
+                viewModel = viewModel
+                
             )
         }
     }
