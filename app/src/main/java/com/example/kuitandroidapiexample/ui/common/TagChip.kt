@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.common
+package com.example.kuitandroidapiexample.ui.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.kuitandroidapiexample.model.AnimalType
+import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 

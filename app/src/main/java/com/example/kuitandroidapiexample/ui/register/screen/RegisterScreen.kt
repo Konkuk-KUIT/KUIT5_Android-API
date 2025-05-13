@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.register.screen
+package com.example.kuitandroidapiexample.ui.register.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,10 +29,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.model.AnimalType
-import com.example.kuitandroidapiexample.register.componet.FindUTextField
-import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.model.AnimalType
+import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
+import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.launch

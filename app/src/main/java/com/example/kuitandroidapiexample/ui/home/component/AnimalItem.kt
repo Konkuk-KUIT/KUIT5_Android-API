@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.home.component
+package com.example.kuitandroidapiexample.ui.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,9 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.kuitandroidapiexample.R
-import com.example.kuitandroidapiexample.common.TagChip
+import com.example.kuitandroidapiexample.ui.common.TagChip
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
-import com.example.kuitandroidapiexample.model.AnimalType
+import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 
