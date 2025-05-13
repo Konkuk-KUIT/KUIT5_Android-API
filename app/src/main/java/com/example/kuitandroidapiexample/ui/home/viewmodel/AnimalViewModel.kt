@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.kuitandroidapiexample.data.ServicePool
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
@@ -14,8 +16,10 @@ import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
 
-class AnimalViewModel : ViewModel() {
-    private val animalService: AnimalService by lazy { ServicePool.animalService }
+class AnimalViewModel(
+    private val animalService: AnimalService
+) : ViewModel() {
+//    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
     val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
@@ -109,4 +113,10 @@ class AnimalViewModel : ViewModel() {
         )
         postAddAnimal(request)
     }
+}
+
+class AnimalViewModelFactory (
+    private val animalService: AnimalService
+): ViewModelProvider.Factory{
+    override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T=AnimalViewModel(animalService) as T
 }
