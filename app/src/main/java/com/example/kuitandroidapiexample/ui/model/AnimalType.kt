@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.model
+package com.example.kuitandroidapiexample.ui.model
 
 enum class AnimalType(
     val type: String

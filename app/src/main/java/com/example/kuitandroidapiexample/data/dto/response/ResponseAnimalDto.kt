@@ -1,6 +1,6 @@
 package com.example.kuitandroidapiexample.data.dto.response
 
-import com.example.kuitandroidapiexample.model.AnimalType
+import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 @Serializable
