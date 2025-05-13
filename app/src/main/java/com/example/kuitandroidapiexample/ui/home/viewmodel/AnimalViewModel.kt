@@ -26,13 +26,14 @@ class AnimalViewModel(
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            runCatching {
-                animalService.getTotalAnimalList()
-            }.onSuccess { data ->
-                _animalListState.value = data
-            }.onFailure { error ->
-                Log.e("getTotalAnimalList", error.message ?: "Unknown error")
-            }
+            animalRepository.getTotalAnimalList().fold(
+                onSuccess = { data ->
+                    _animalListState.value = data
+                },
+                onFailure = { error ->
+                    Log.e("getTotalAnimalList", error.message ?: "Unknown error")
+                }
+            )
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.kuitandroidapiexample.data.repository
 
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
+import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
+import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 
@@ -28,6 +30,12 @@ class AnimalRepository(
                     address = address
                 )
             )
+        }
+    }
+
+    suspend fun getTotalAnimalList(): Result<BaseResponse<List<ResponseAnimalDto>>> {
+        return runCatching {
+            animalService.getTotalAnimalList()
         }
     }
 
