@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.home.viewmodel
+package com.example.kuitandroidapiexample.ui.home.viewmodel
 
 import android.util.Log
 import androidx.compose.runtime.State
