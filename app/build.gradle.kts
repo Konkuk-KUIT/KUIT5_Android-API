@@ -11,6 +11,7 @@ val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
 }
 
+
 android {
     namespace = "com.example.kuitandroidapiexample"
     compileSdk = 35
@@ -23,8 +24,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "BASE_URL", properties["base.url"].toString())
-    
+        buildConfigField("String", "BASE_URL", "\"${properties["base.url"]}\"")
+
 
     }
 
@@ -86,8 +87,6 @@ dependencies {
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
 
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
 
 

@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.data
 
+import android.util.Log
 import com.example.kuitandroidapiexample.BuildConfig
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -10,7 +11,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiFactory {
-    private const val BASE_URL = "https://jhr75t9q8d.execute-api.ap-northeast-2.amazonaws.com/dev/"
+    private const val BASE_URL = BuildConfig.BASE_URL
+
     // 실행이 안돼서 url 넣음
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
