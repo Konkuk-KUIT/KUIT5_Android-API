@@ -7,27 +7,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
+import com.example.kuitandroidapiexample.data.ServicePool.animalService
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AnimalViewModel(
-    private val animalService: AnimalService
+    private val animalRepository: AnimalRepository
 ) : ViewModel() {
-    //private val animalService: AnimalService by lazy { ServicePool.animalService }
+//    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
-    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?>get() = _animalListState
+    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
 
-    private val _animalDetailState = mutableStateOf<ResponseAnimalDetailDto?>(null)
-    val animalDetailState: State<ResponseAnimalDetailDto?> get() = _animalDetailState
+    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
+    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
 
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
@@ -39,15 +38,11 @@ class AnimalViewModel(
         viewModelScope.launch {
             runCatching {
                 animalService.getTotalAnimalList()
+            }.onSuccess { data ->
+                _animalListState.value = data
+            }.onFailure { error ->
+                Log.e("getTotalAnimalList", error.message ?: "Unknown error")
             }
-                .onSuccess { data ->
-                    _animalListState.value = data
-
-                }
-                .onFailure { error ->
-                    Log.e("getTotalAnimallist", error.message?:"Unkonwn error") // Nullable한 객체, Null값 처리 해줘야함
-
-                }
         }
     }
 
@@ -55,14 +50,11 @@ class AnimalViewModel(
         viewModelScope.launch {
             runCatching {
                 animalService.getAnimalDetail(id)
-            }.fold(
-                onSuccess = { data ->
-                    _animalDetailState.value = data.data
-                },
-                onFailure = { error ->
-                    Log.e("getAnimalDetail", error.message ?: "Unknown error")
-                }
-            )
+            }.onSuccess { data ->
+                _animalDetailState.value = data
+            }.onFailure { error ->
+                Log.e("getAnimalDetail", error.message ?: "Unknown error")
+            }
         }
     }
 
@@ -70,15 +62,11 @@ class AnimalViewModel(
         viewModelScope.launch {
             runCatching {
                 animalService.postAddAnimal(request)
-            }.fold(
-                onSuccess = {
-                    _addAnimalState.value = true
-                },
-                onFailure = { error ->
-                    _addAnimalState.value = false
-                    Log.e("postAddAnimal", error.message ?: "Unknown error")
-                }
-            )
+            }.onSuccess { data ->
+                _addAnimalState.value = true
+            }.onFailure { error ->
+                Log.e("postAddAnimal", error.message ?: "Unknown error")
+            }
         }
     }
 
@@ -87,11 +75,10 @@ class AnimalViewModel(
             runCatching {
                 animalService.deleteAnimal(id)
             }.fold(
-                onSuccess = {
+                onSuccess = { data ->
                     _deleteAnimalState.value = true
                 },
                 onFailure = { error ->
-                    _deleteAnimalState.value = false
                     Log.e("deleteAnimal", error.message ?: "Unknown error")
                 }
             )
@@ -118,7 +105,7 @@ class AnimalViewModel(
 }
 
 class AnimalViewModelFactory(
-    private val animalService: AnimalService
-): ViewModelProvider.Factory{
-    override fun <T: ViewModel> create(modelClass: Class<T>) : T = AnimalViewModel(animalService) as T
+    private val animalRepository: AnimalRepository
+): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>) : T = AnimalViewModel(animalRepository) as T
 }
