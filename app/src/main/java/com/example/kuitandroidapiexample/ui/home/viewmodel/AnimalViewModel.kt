@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 class AnimalViewModel(
     private val animalService: AnimalService
 ) : ViewModel() {
+    // TODO: Repository migration
 //    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
