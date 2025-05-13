@@ -22,9 +22,6 @@ class AnimalViewModel(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 
-    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
-    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
-
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
 
