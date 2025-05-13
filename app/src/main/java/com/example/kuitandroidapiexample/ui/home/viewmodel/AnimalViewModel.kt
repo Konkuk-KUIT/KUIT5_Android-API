@@ -1,6 +1,5 @@
-package com.example.kuitandroidapiexample.home.viewmodel
+package com.example.kuitandroidapiexample.ui.home.viewmodel
 
-import android.R.attr.data
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -12,12 +11,8 @@ import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
-import com.example.kuitandroidapiexample.model.AnimalType
-import kotlinx.coroutines.CoroutineScope
+import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class AnimalViewModel : ViewModel() {
     private val animalService: AnimalService by lazy { ServicePool.animalService }
