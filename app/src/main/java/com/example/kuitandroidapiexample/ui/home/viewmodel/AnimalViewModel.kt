@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.ui.home.viewmodel
 
 import android.util.Log
+import android.util.Log.i
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -14,96 +15,39 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailD
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
+import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
+import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalUiState
+import com.example.kuitandroidapiexample.ui.home.uistate.toUiState
 import com.example.kuitandroidapiexample.ui.model.AnimalType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AnimalViewModel(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
-    // TODO: Repository migration
-//    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
-    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
-    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
+    private val _uiState = MutableStateFlow(listOf<AnimalUiState>())
+    val uiState = _uiState.asStateFlow()
 
-    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
-    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
 
-    private val _addAnimalState = mutableStateOf<Boolean?>(null)
-    val addAnimalState: State<Boolean?> get() = _addAnimalState
-
-    private val _deleteAnimalState = mutableStateOf<Boolean?>(null)
-    val deleteAnimalState: State<Boolean?> get() = _deleteAnimalState
-
-    fun getTotalAnimalList() {
+    fun getAnimal() {
         viewModelScope.launch {
-            runCatching {
-                animalService.getTotalAnimalList()
-            }.onSuccess { data ->
-                _animalListState.value = data
-            }.onFailure { error ->
-                Log.e("getTotalAnimalList", error.message ?: "Unknown error")
-            }
-        }
-    }
-
-    fun getAnimalDetail(id: Int) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.getAnimalDetail(id)
-            }.onSuccess { data ->
-                _animalDetailState.value = data
-            }.onFailure { error ->
-                Log.e("getAnimalDetail", error.message ?: "Unknown error")
-            }
-        }
-    }
-
-    fun postAddAnimal(request: RequestAddAnimalDto) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.postAddAnimal(request)
-            }.onSuccess { data ->
-                _addAnimalState.value = true
-            }.onFailure { error ->
-                Log.e("postAddAnimal", error.message ?: "Unknown error")
-            }
-        }
-    }
-
-    fun deleteAnimal(id: Int) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.deleteAnimal(id)
-            }.fold(
+            animalRepository.getAnimal().fold(
                 onSuccess = { data ->
-                    _deleteAnimalState.value = true
+                    _uiState.value = data.data.map { it.toUiState() }
                 },
                 onFailure = { error ->
-                    Log.e("deleteAnimal", error.message ?: "Unknown error")
+                    Log.e("okHttpError", error.message.toString())
                 }
             )
         }
     }
-
-    fun addAnimal(
-        url: String,
-        name: String,
-        state: AnimalType,
-        breed: String,
-        address: String
-    ) {
-        val request = RequestAddAnimalDto(
-            id = 1,
-            url = url,
-            name = name,
-            state = state,
-            breed = breed,
-            address = address
-        )
-        postAddAnimal(request)
-    }
 }
+
+
+
 
 class AnimalViewModelFactory(
     private val animalRepository: AnimalRepository

@@ -16,6 +16,8 @@ import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
+import com.example.kuitandroidapiexample.ui.register.viewmodel.AnimalRegisterViewModel
+import com.example.kuitandroidapiexample.ui.register.viewmodel.AnimalRegisterViewModelFactory
 
 @Composable
 fun MainNavHost(
@@ -29,6 +31,9 @@ fun MainNavHost(
     )
     val animalDetailViewModel: AnimalDetailViewModel = viewModel(
         factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
+    )
+    val animalRegisterViewModel: AnimalRegisterViewModel = viewModel(
+        factory = AnimalRegisterViewModelFactory(context.appContainer.provideRepository())
     )
 
     NavHost(
@@ -49,7 +54,7 @@ fun MainNavHost(
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = animalViewModel
+                viewModel = animalRegisterViewModel
 
             )
         }

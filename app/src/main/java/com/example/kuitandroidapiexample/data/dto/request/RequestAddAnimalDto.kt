@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestAddAnimalDto(
-    val id: Int,
     val url: String,
     val name: String,
     val state: AnimalType,

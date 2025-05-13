@@ -22,7 +22,7 @@ class AnimalDetailViewModel(
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
-            animalRepository.getAnimal(id).fold(
+            animalRepository.getAnimalDetail(id).fold(
                 onSuccess = { data ->
                     _uiState.value = data.data.toUiState()
                 },
