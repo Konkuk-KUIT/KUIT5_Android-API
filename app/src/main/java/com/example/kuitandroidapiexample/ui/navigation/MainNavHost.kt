@@ -10,6 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.kuitandroidapiexample.App
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
@@ -22,8 +24,11 @@ fun MainNavHost(
     val navController = rememberNavController()
 
     val context = LocalContext.current.applicationContext as App
-    val viewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModelFactory(context.appContainer.provideApiService())
+    val animalViewModel: AnimalViewModel = viewModel(
+        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
+    )
+    val animalDetailViewModel: AnimalDetailViewModel = viewModel(
+        factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
     )
 
     NavHost(
@@ -37,14 +42,14 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
-                viewModel = viewModel
+                viewModel = animalViewModel
             )
         }
         composable<Route.Register> {
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = viewModel
+                viewModel = animalViewModel
 
             )
         }
@@ -55,7 +60,7 @@ fun MainNavHost(
                 padding = padding,
                 index = args.index,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = viewModel
+                viewModel = animalDetailViewModel
             )
         }
     }

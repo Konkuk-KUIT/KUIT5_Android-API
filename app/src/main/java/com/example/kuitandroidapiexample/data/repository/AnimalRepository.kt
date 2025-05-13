@@ -7,5 +7,6 @@ class AnimalRepository(
 ) {
     suspend fun getAnimal(id: Int) = runCatching { animalService.getAnimalDetail(id) }
 
+    suspend fun deleteAnimal(id: Int) = runCatching { animalService.deleteAnimal(id) }
     //TODO: POST, GET, DELETE 등 구현...
 }

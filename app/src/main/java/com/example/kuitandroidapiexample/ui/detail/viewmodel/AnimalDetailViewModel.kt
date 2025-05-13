@@ -10,6 +10,7 @@ import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AnimalDetailViewModel(
@@ -19,7 +20,7 @@ class AnimalDetailViewModel(
     private val _uiState = MutableStateFlow(AnimalDetailUiState())
     val uiState = _uiState.asStateFlow()
 
-    private fun getAnimalDetail(id: Int) {
+    fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
             animalRepository.getAnimal(id).fold(
                 onSuccess = { data ->
@@ -30,6 +31,26 @@ class AnimalDetailViewModel(
                 }
             )
         }
+    }
+
+    fun deleteAnimal(id: Int) {
+        viewModelScope.launch {
+            animalRepository.deleteAnimal(id).fold(
+                onSuccess = { data ->
+//                    _uiState.value.isDeleted = true
+//                    왜 안되는지?
+                    _uiState.update {
+                        it.copy(
+                            isDeleted = true
+                        )
+                    }
+                },
+                onFailure = { error ->
+                    Log.e("okHttpError", error.message.toString())
+                }
+            )
+        }
+
     }
 }
 

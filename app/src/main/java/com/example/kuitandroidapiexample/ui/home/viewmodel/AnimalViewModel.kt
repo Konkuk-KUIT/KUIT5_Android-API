@@ -7,16 +7,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
+import com.example.kuitandroidapiexample.data.ServicePool.animalService
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
 
 class AnimalViewModel(
-    private val animalService: AnimalService
+    private val animalRepository: AnimalRepository
 ) : ViewModel() {
     // TODO: Repository migration
 //    private val animalService: AnimalService by lazy { ServicePool.animalService }
@@ -104,9 +106,9 @@ class AnimalViewModel(
 }
 
 class AnimalViewModelFactory(
-    private val animalService: AnimalService
+    private val animalRepository: AnimalRepository
 
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        AnimalViewModel(animalService) as T
+        AnimalViewModel(animalRepository) as T
 }
