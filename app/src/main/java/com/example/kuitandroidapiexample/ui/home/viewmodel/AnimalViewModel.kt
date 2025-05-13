@@ -106,6 +106,7 @@ class AnimalViewModel(
 class AnimalViewModelFactory(
     private val animalService: AnimalService
 
-): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T = AnimalViewModel(animalService) as T
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+        AnimalViewModel(animalService) as T
 }
