@@ -49,8 +49,6 @@ fun MainNavHost(
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = viewModel
-
             )
         }
         composable<Route.Detail> { navBackStackEntry ->
