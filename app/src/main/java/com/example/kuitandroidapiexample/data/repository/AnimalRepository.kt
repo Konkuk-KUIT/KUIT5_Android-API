@@ -9,7 +9,7 @@ class AnimalRepository(
 
     suspend fun deleteAnimal(id: Int) = runCatching { animalService.deleteAnimal(id) }
 
-//    suspend fun getAnimals
+    suspend fun getAnimals() = runCatching { animalService.getTotalAnimalList() }
 
 //    suspend fun postAnimal(animal: Animal)
 }

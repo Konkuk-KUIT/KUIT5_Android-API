@@ -17,4 +17,5 @@ data class ResponseAnimalDetailDto(
     @SerialName("breed")
     val breed: String,
     @SerialName("address")
-    val address: String)
+    val address: String
+)

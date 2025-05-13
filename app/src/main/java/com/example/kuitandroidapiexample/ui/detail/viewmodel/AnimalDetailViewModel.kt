@@ -35,7 +35,7 @@ class AnimalDetailViewModel(
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                animalService.deleteAnimal(id)
+                animalRepository.deleteAnimal(id)
             }.fold(
                 onSuccess = {
                     _uiState.update {

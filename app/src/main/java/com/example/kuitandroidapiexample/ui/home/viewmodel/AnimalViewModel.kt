@@ -6,51 +6,44 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.kuitandroidapiexample.data.ServicePool
 import com.example.kuitandroidapiexample.data.ServicePool.animalService
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
-import com.example.kuitandroidapiexample.data.service.AnimalService
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalUiState
+import com.example.kuitandroidapiexample.ui.home.uistate.toUiState
 import com.example.kuitandroidapiexample.ui.model.AnimalType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AnimalViewModel(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
-//    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
     val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
 
-    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
-    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
-
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
 
-    private val _deleteAnimalState = mutableStateOf<Boolean?>(null)
-    val deleteAnimalState: State<Boolean?> get() = _deleteAnimalState
+
+    private val _uiState = MutableStateFlow<List<AnimalUiState>>(emptyList())
+    val uiState = _uiState.asStateFlow()
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            runCatching {
-                animalService.getTotalAnimalList() //animalRepository로 바꾸기
-            }
-                .onSuccess { data ->
-                    _animalListState.value = data
-                    //성공 핸들링
+            animalRepository.getAnimals().fold(
+                onSuccess = { data ->
+                    _uiState.value = data.data.map { it.toUiState() }
+                },
+                onFailure = { error ->
+                    Log.e("okhttpError", error.message.toString())
                 }
-                .onFailure { error ->
-                    Log.e("getTotalAnimalList", error.message ?: "Unknown error")
-                    //실패 핸들링
-                }
+            )
         }
     }
-
 
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
