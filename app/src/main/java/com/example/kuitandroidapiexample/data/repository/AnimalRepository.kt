@@ -8,29 +8,30 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseDeleteAnimalD
 import com.example.kuitandroidapiexample.data.service.AnimalService
 
 class AnimalRepository(
-    private val service: AnimalService
+    private val animalService: AnimalService
 ) {
     suspend fun getTotalAnimalList(): Result<BaseResponse<List<ResponseAnimalDto>>> {
         return runCatching {
-            service.getTotalAnimalList()
+            animalService.getTotalAnimalList()
         }
     }
 
     suspend fun getAnimalDetail(id: Int): Result<BaseResponse<ResponseAnimalDetailDto>> {
         return runCatching {
-            service.getAnimalDetail(id)
+            animalService.getAnimalDetail(id)
         }
     }
+    //suspend fun getAnimalDetail(id: Int) = runCatching { animalService.getAnimalDetail(id) }
 
     suspend fun postAddAnimal(request: RequestAddAnimalDto): Result<Unit> {
         return runCatching {
-            service.postAddAnimal(request)
+            animalService.postAddAnimal(request)
         }
     }
 
     suspend fun deleteAnimal(id: Int): Result<ResponseDeleteAnimalDto> {
         return runCatching {
-            service.deleteAnimal(id)
+            animalService.deleteAnimal(id)
         }
     }
 }
