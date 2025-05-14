@@ -45,6 +45,7 @@ fun DetailScreen(
     navigateToBack: () -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
+
     val response by viewModel.animalDetailState
     val animalDetail = response?.data
 
