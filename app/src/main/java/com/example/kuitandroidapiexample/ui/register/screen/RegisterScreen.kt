@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.model.AnimalType
-import com.example.kuitandroidapiexample.register.componet.FindUTextField
-import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.model.AnimalType
+import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
+import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.delay

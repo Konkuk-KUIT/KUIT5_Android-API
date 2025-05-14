@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.home.screen
+package com.example.kuitandroidapiexample.ui.home.screen
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kuitandroidapiexample.home.component.AnimalItem
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 
