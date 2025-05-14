@@ -5,7 +5,9 @@ import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 
 class AppContainer {
     private fun provideApiService() = animalService
-    fun provideAnimalRepository(): AnimalRepository {
-        return AnimalRepository(provideApiService())
-    }
+//    fun provideAnimalRepository(): AnimalRepository {
+//        //return AnimalRepository(provideApiService())
+//        return AnimalRepository(animalService)
+//    }
+    fun provideAnimalRepository() = AnimalRepository(provideApiService())
 }
