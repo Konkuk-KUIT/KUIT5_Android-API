@@ -1,6 +1,5 @@
 package com.example.kuitandroidapiexample.navigation
 
-import RegisterScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -9,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.kuitandroidapiexample.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.home.screen.HomeScreen
-
+import com.example.kuitandroidapiexample.register.screen.RegisterScreen
 
 @Composable
 fun MainNavHost(
