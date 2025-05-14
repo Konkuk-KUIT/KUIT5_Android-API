@@ -1,8 +1,10 @@
 package com.example.kuitandroidapiexample.data.service
 
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
+import com.example.kuitandroidapiexample.data.dto.request.RequestDto
+import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalListDto
+import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -12,20 +14,14 @@ import retrofit2.http.Path
 
 interface AnimalService {
     @GET("animals")
-    fun getTotalAnimalList() : Call<ResponseAnimalListDto>
+    suspend fun getTotalAnimalList(): BaseResponse<List<ResponseAnimalDto>>
 
     @GET("animals/{id}")
-    fun getAnimalDetail(
-        @Path("id") id: Int
-    ) : Call<ResponseAnimalDetailDto>
+    suspend fun getAnimal(@Path("id") id: Int): BaseResponse<ResponseAnimalDetailDto>
 
     @POST("animals")
-    fun postAddAnimal(
-        @Body request: RequestAddAnimalDto
-    ) : Call<Unit>
+    suspend fun registerAnimal(@Body request: RequestAddAnimalDto): RequestDto
 
     @DELETE("animals/{id}")
-    fun deleteAnimal(
-        @Path("id") id: Int
-    ) : Call<Unit>
+    suspend fun deleteAnimal(@Path("id") id: Int): ResponseAnimalDetailDto
 }

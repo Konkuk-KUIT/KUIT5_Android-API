@@ -41,11 +41,12 @@ fun RegisterScreen(
     var address by remember { mutableStateOf("") }
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
+    val success by viewModel.registerSuccess
 
-    val addAnimal by viewModel.addAnimalState
+    val addAnimal by viewModel.animalAddState
 
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
+    LaunchedEffect(success) {
+        if (success) {
             navigateToBack()
         }
     }
@@ -115,12 +116,13 @@ fun RegisterScreen(
             ),
             shape = RoundedCornerShape(8.dp),
             onClick = {
-                viewModel.addAnimal(
+                viewModel.postAddAnimal(
                     url = url,
                     name = reporterName,
                     state = animalType,
                     breed = "",
-                    address = address
+                    address = address,
+                    id = 1
                 )
             }
         ) {
