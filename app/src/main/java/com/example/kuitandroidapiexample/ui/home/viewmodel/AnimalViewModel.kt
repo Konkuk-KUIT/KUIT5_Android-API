@@ -12,12 +12,14 @@ import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
 
 class AnimalViewModel(
-    private val animalService: AnimalService
+    //private val animalService: AnimalService
+    private val repository: AnimalRepository
 ) : ViewModel() {
     //private val animalService: AnimalService by lazy { ServicePool.animalService }
 
@@ -36,9 +38,10 @@ class AnimalViewModel(
     fun getTotalAnimalList() {
         viewModelScope.launch {
             runCatching {
-                animalService.getTotalAnimalList()
+                //animalService.getTotalAnimalList()
+                repository.getTotalAnimalList()
             }.onSuccess { data ->
-                _animalListState.value = data
+                _animalListState.value = data.getOrNull()
             }.onFailure { error ->
                 Log.e("getTotalAnimalList", error.message ?: "Unknown error")
             }
@@ -48,10 +51,11 @@ class AnimalViewModel(
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {
             runCatching {
-                animalService.getAnimalDetail(id)
+                //animalService.getAnimalDetail(id)
+                repository.getAnimalDetail(id)
             }.fold(
                 onSuccess = { data ->
-                    _animalDetailState.value = data.data
+                    _animalDetailState.value = data.getOrNull()?.data
                 },
                 onFailure = { error ->
                     Log.e("getAnimalDetail", error.message ?: "Unknown error")
@@ -63,7 +67,8 @@ class AnimalViewModel(
     fun postAddAnimal(request: RequestAddAnimalDto) {
         viewModelScope.launch {
             runCatching {
-                animalService.postAddAnimal(request)
+                //animalService.postAddAnimal(request)
+                repository.postAddAnimal(request)
             }.fold(
                 onSuccess = {
                     Log.d("postAddAnimal", "등록 성공")
@@ -80,10 +85,11 @@ class AnimalViewModel(
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                animalService.deleteAnimal(id)
+                //animalService.deleteAnimal(id)
+                repository.deleteAnimal(id)
             }.fold(
                 onSuccess = { response ->
-                    Log.d("deleteAnimal", "삭제 성공. ID: ${response.data.id}, message: ${response.message}")
+                    Log.d("deleteAnimal", "삭제 성공. ID: ${id}, message: ${response.toString()}")
                 },
                 onFailure = { error ->
                     Log.e("deleteAnimal", error.message ?: "Unknown error")
@@ -111,9 +117,14 @@ class AnimalViewModel(
     }
 }
 
+//class AnimalViewModelFactory(
+//    private val animalService: AnimalService
+//): ViewModelProvider.Factory{
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T = AnimalViewModel(animalService) as T
+//}
 class AnimalViewModelFactory(
-    private val animalService: AnimalService
-): ViewModelProvider.Factory{
-    override fun <T : ViewModel> create(modelClass: Class<T>): T = AnimalViewModel(animalService) as T
-
+    private val animalRepository: AnimalRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T =
+        AnimalViewModel(animalRepository) as T
 }
