@@ -8,4 +8,5 @@ data class AnimalDetailUiState(
     val animalType: AnimalType = AnimalType.PROTECT,
     val address: String = "",
     val reporterName: String = "",
+    val isDelete: Boolean = false,
 )

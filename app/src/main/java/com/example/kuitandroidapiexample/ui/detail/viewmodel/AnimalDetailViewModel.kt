@@ -1,6 +1,5 @@
 package com.example.kuitandroidapiexample.ui.detail.viewmodel
 
-import android.R.attr.data
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -10,11 +9,12 @@ import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AnimalDetailViewModel(
     private val animalRepository: AnimalRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AnimalDetailUiState())
     val uiState = _uiState.asStateFlow()
@@ -29,6 +29,30 @@ class AnimalDetailViewModel(
                     Log.e("okhttpError", error.message.toString())
                 }
             )
+        }
+    }
+
+    fun deleteAnimal(id: Int) {
+        viewModelScope.launch {
+            animalRepository.deleteAnimal(id).fold(
+                onSuccess = {
+                    _uiState.update { it.copy(isDelete = true) }
+                },
+                onFailure = { error ->
+                    Log.e("deleteAnimalError", error.message.toString())
+                }
+            )
+//            runCatching {
+//                //animalService.deleteAnimal(id)
+//                repository.deleteAnimal(id)
+//            }.fold(
+//                onSuccess = { response ->
+//                    Log.d("deleteAnimal", "삭제 성공. ID: ${id}, message: ${response.toString()}")
+//                },
+//                onFailure = { error ->
+//                    Log.e("deleteAnimal", error.message ?: "Unknown error")
+//                }
+//            )
         }
     }
 
