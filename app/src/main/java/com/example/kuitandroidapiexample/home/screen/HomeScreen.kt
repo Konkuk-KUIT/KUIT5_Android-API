@@ -1,6 +1,5 @@
 package com.example.kuitandroidapiexample.home.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -71,9 +70,6 @@ fun HomeScreen(
                     )
                 )
             }
-
-
-
             LazyColumn(
                 state = lazyState,
                 contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp),
