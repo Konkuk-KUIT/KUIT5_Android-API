@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.model
+package com.example.kuitandroidapiexample.ui.model
 
 data class AnimalData(
     val imageUrl: String,
