@@ -23,21 +23,49 @@ class AnimalRegisterViewModel(
     private val _uiState = MutableStateFlow(AnimalAddUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun onDismissSnackBar() {
-        _uiState.update { it.copy(
-            isAdded = false
-        ) }
+    fun onUrlChanged(url: String) {
+        _uiState.update {
+            it.copy(
+                url = url
+            )
+        }
     }
 
-    fun postAnimal(animalAddUiState: AnimalAddUiState) {
+    fun onReporterChanged(reporter: String) {
+        _uiState.update {
+            it.copy(
+                reporter = reporter
+            )
+        }
+    }
+
+    fun onAddressChanged(address: String) {
+        _uiState.update {
+            it.copy(
+                address = address
+            )
+        }
+    }
+
+    fun onAnimalNameChanged(animalName: String) {
+        _uiState.update {
+            it.copy(
+                animalName = animalName
+            )
+        }
+    }
+
+    fun onTypeChanged (animalType: AnimalType) {
+        _uiState.update {
+            it.copy(
+                animalType = animalType
+            )
+        }
+    }
+
+
+    fun postAnimal() {
         viewModelScope.launch {
-            _uiState.update { it.copy(
-                url = animalAddUiState.url,
-                reporter = animalAddUiState.reporter,
-                animalName = animalAddUiState.animalName,
-                animalType = animalAddUiState.animalType,
-                address = animalAddUiState.address
-            ) }
             animalRepository.postAnimal(_uiState.value.toDto()).fold(
                 onSuccess = { data ->
                     _uiState.update { it.copy(isAdded = true) }

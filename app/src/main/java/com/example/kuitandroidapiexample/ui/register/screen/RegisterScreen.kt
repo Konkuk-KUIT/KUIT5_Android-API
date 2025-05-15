@@ -45,11 +45,11 @@ fun RegisterScreen(
     navigateToBack: () -> Unit = {},
     viewModel: AnimalRegisterViewModel = viewModel()
 ) {
-    var url by remember { mutableStateOf("") }
-    var animalName by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var reporterName by remember { mutableStateOf("") }
-    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
+//    var url by remember { mutableStateOf("") }
+//    var animalName by remember { mutableStateOf("") }
+//    var address by remember { mutableStateOf("") }
+//    var reporterName by remember { mutableStateOf("") }
+//    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
 //    val addAnimal by viewModel.addAnimalState
 
@@ -68,7 +68,6 @@ fun RegisterScreen(
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-                viewModel.onDismissSnackBar()
                 navigateToBack()
             }
 
@@ -99,24 +98,25 @@ fun RegisterScreen(
             }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = url
-            ) { url = it }
+                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = uiState.url
+            ) {
+                viewModel.onUrlChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = reporterName
-            ) { reporterName = it }
+                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = uiState.reporter
+            ) { viewModel.onReporterChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = address
-            ) { address = it }
+                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = uiState.address
+            ) { viewModel.onAddressChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = animalName
-            ) { animalName = it }
+                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = uiState.animalName
+            ) { viewModel.onAnimalNameChanged(it) }
 
             TypeSelectContent(
-                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = animalType
-            ) { animalType = it }
+                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = uiState.animalType
+            ) { viewModel.onTypeChanged(it) }
 
         }
 
@@ -130,15 +130,7 @@ fun RegisterScreen(
                 containerColor = colors.orange
             ), shape = RoundedCornerShape(8.dp), onClick = {
 
-                viewModel.postAnimal(
-                    AnimalAddUiState(
-                        url = url,
-                        reporter = reporterName,
-                        animalType = animalType,
-                        animalName = animalName,
-                        address = address
-                    )
-                )
+                viewModel.postAnimal()
 
 
             }) {

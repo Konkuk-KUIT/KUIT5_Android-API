@@ -26,15 +26,6 @@ fun MainNavHost(
     val navController = rememberNavController()
 
     val context = LocalContext.current.applicationContext as App
-    val animalViewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
-    )
-    val animalDetailViewModel: AnimalDetailViewModel = viewModel(
-        factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
-    )
-    val animalRegisterViewModel: AnimalRegisterViewModel = viewModel(
-        factory = AnimalRegisterViewModelFactory(context.appContainer.provideRepository())
-    )
 
     NavHost(
         navController = navController,
@@ -47,14 +38,18 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
-                viewModel = animalViewModel
+                viewModel = viewModel(
+                    factory = AnimalViewModelFactory(context.appContainer.provideRepository())
+                )
             )
         }
         composable<Route.Register> {
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = animalRegisterViewModel
+                viewModel = viewModel(
+                    factory = AnimalRegisterViewModelFactory(context.appContainer.provideRepository())
+                )
 
             )
         }
@@ -65,7 +60,9 @@ fun MainNavHost(
                 padding = padding,
                 index = args.index,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = animalDetailViewModel
+                viewModel = viewModel(
+                    factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
+                )
             )
         }
     }
