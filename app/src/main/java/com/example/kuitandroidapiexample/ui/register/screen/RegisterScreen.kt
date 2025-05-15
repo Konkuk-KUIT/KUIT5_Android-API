@@ -1,5 +1,6 @@
-package com.example.kuitandroidapiexample.register.screen
+package com.example.kuitandroidapiexample.ui.register.screen
 
+import android.R.attr.name
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +14,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,40 +27,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.util.CoilUtils.result
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.model.AnimalType
-import com.example.kuitandroidapiexample.register.componet.FindUTextField
-import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.model.AnimalType
+import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
+import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.register.uistate.AnimalAddUiState
+import com.example.kuitandroidapiexample.ui.register.viewmodel.AnimalRegisterViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.coroutineContext
 
 @Composable
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalRegisterViewModel = viewModel()
 ) {
-    var url by remember { mutableStateOf("") }
-    var animalName by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var reporterName by remember { mutableStateOf("") }
-    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
+//    var url by remember { mutableStateOf("") }
+//    var animalName by remember { mutableStateOf("") }
+//    var address by remember { mutableStateOf("") }
+//    var reporterName by remember { mutableStateOf("") }
+//    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
-    val addAnimal by viewModel.addAnimalState
+//    val addAnimal by viewModel.addAnimalState
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHost = remember { SnackbarHostState() }
     val cScope = rememberCoroutineScope()
 
 
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
+    LaunchedEffect(uiState.isAdded) {
+        if (uiState.isAdded) {
             cScope.launch {
 
                 val result = snackBarHost.showSnackbar(
@@ -68,7 +68,6 @@ fun RegisterScreen(
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-
                 navigateToBack()
             }
 
@@ -99,24 +98,25 @@ fun RegisterScreen(
             }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = url
-            ) { url = it }
+                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = uiState.url
+            ) {
+                viewModel.onUrlChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = reporterName
-            ) { reporterName = it }
+                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = uiState.reporter
+            ) { viewModel.onReporterChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = address
-            ) { address = it }
+                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = uiState.address
+            ) { viewModel.onAddressChanged(it) }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = animalName
-            ) { animalName = it }
+                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = uiState.animalName
+            ) { viewModel.onAnimalNameChanged(it) }
 
             TypeSelectContent(
-                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = animalType
-            ) { animalType = it }
+                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = uiState.animalType
+            ) { viewModel.onTypeChanged(it) }
 
         }
 
@@ -129,13 +129,8 @@ fun RegisterScreen(
                 .align(Alignment.BottomCenter), colors = ButtonDefaults.buttonColors(
                 containerColor = colors.orange
             ), shape = RoundedCornerShape(8.dp), onClick = {
-                viewModel.addAnimal(
-                    url = url,
-                    name = reporterName,
-                    state = animalType,
-                    breed = "",
-                    address = address
-                )
+
+                viewModel.postAnimal()
 
 
             }) {
