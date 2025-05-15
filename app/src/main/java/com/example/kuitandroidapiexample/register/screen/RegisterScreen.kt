@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,12 +28,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil3.util.CoilUtils.result
 import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.model.AnimalType
 import com.example.kuitandroidapiexample.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 @Composable
 fun RegisterScreen(
@@ -44,9 +55,24 @@ fun RegisterScreen(
 
     val addAnimal by viewModel.addAnimalState
 
+    val snackBarHost = remember { SnackbarHostState() }
+    val cScope = rememberCoroutineScope()
+
+
     LaunchedEffect(addAnimal) {
         if (addAnimal == true) {
-            navigateToBack()
+            cScope.launch {
+
+                val result = snackBarHost.showSnackbar(
+                    message = "등록이 완료되었습니다.",
+                    duration = SnackbarDuration.Short,
+                    withDismissAction = true
+                )
+
+                navigateToBack()
+            }
+
+
         }
     }
 
@@ -73,32 +99,23 @@ fun RegisterScreen(
             }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 21.dp),
-                title = "사진 url 입력",
-                value = url
+                modifier = Modifier.padding(top = 21.dp), title = "사진 url 입력", value = url
             ) { url = it }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "이름 입력",
-                value = reporterName
+                modifier = Modifier.padding(top = 15.dp), title = "이름 입력", value = reporterName
             ) { reporterName = it }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "주소 입력",
-                value = address
+                modifier = Modifier.padding(top = 15.dp), title = "주소 입력", value = address
             ) { address = it }
 
             FindUTextField(
-                modifier = Modifier.padding(top = 15.dp),
-                title = "동물 이름",
-                value = animalName
+                modifier = Modifier.padding(top = 15.dp), title = "동물 이름", value = animalName
             ) { animalName = it }
 
             TypeSelectContent(
-                modifier = Modifier.padding(start = 16.dp, top = 30.dp),
-                animalType = animalType
+                modifier = Modifier.padding(start = 16.dp, top = 30.dp), animalType = animalType
             ) { animalType = it }
 
         }
@@ -109,12 +126,9 @@ fun RegisterScreen(
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth()
                 .height(50.dp)
-                .align(Alignment.BottomCenter),
-            colors = ButtonDefaults.buttonColors(
+                .align(Alignment.BottomCenter), colors = ButtonDefaults.buttonColors(
                 containerColor = colors.orange
-            ),
-            shape = RoundedCornerShape(8.dp),
-            onClick = {
+            ), shape = RoundedCornerShape(8.dp), onClick = {
                 viewModel.addAnimal(
                     url = url,
                     name = reporterName,
@@ -122,13 +136,20 @@ fun RegisterScreen(
                     breed = "",
                     address = address
                 )
-            }
-        ) {
+
+
+            }) {
             Text(
-                text = "등록하기",
-                style = typography.semiBold.copy(fontSize = 18.sp)
+                text = "등록하기", style = typography.semiBold.copy(fontSize = 18.sp)
             )
+
+
         }
+
+        SnackbarHost(
+            hostState = snackBarHost,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 
 }
