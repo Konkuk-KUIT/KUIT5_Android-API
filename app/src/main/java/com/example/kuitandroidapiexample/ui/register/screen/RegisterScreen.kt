@@ -1,13 +1,16 @@
 package com.example.kuitandroidapiexample.ui.register.screen
 
+import android.R.id.message
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -31,49 +34,55 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import coil3.util.CoilUtils.result
+import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.register.component.FindUTextField
 import com.example.kuitandroidapiexample.ui.register.component.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel(),
+    viewModel: RegisterViewModel = viewModel(),
 ) {
-    var url by remember { mutableStateOf("") }
-    var animalName by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var reporterName by remember { mutableStateOf("") }
-    var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
-
-    val addAnimal by viewModel.addAnimalState
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
-            val result = snackbarHostState.showSnackbar(
-                message = "등록이 완료되었습니다.",
-                actionLabel = "X"
-            )
-            if(result == SnackbarResult.ActionPerformed){
-                navigateToBack()
+    LaunchedEffect(Unit) {
+        viewModel.resetUiState()
+    }
+
+    LaunchedEffect(uiState.isAdded) {
+        if (uiState.isAdded == true) {
+
+            launch {
+                snackbarHostState.showSnackbar(
+                    message = "등록이 완료되었습니다.",
+                    actionLabel = "x"
+                )
             }
-            delay(1000L)
-            viewModel.resetAddAnimal()
+//            if (result == SnackbarResult.ActionPerformed) {
+//                navigateToBack()
+//            }
+
+            delay(3000L)
             navigateToBack()
         }
     }
 
     Scaffold(
-        modifier=Modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) {innerPadding ->
+        modifier = Modifier.fillMaxSize(),
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,34 +109,42 @@ fun RegisterScreen(
                 FindUTextField(
                     modifier = Modifier.padding(top = 21.dp),
                     title = "사진 url 입력",
-                    value = url
-                ) { url = it }
+                    value = uiState.url,
+                    ) {
+                    viewModel.updateUrl(it)
+                    }
 
                 FindUTextField(
                     modifier = Modifier.padding(top = 15.dp),
                     title = "이름 입력",
-                    value = reporterName
-                ) { reporterName = it }
+                    value = uiState.reporterName,
+                    onValueChanged = {
+                        viewModel.updateReporterName(it)
+                    })
 
                 FindUTextField(
                     modifier = Modifier.padding(top = 15.dp),
                     title = "주소 입력",
-                    value = address
-                ) { address = it }
+                    value = uiState.address,
+                    onValueChanged = {
+                        viewModel.updateAddress(it)
+                    })
 
                 FindUTextField(
                     modifier = Modifier.padding(top = 15.dp),
                     title = "동물 이름",
-                    value = animalName
-                ) { animalName = it }
+                    value = uiState.animalName,
+                    onValueChanged = {
+                        viewModel.updateAnimalName(it)
+                    })
 
                 TypeSelectContent(
                     modifier = Modifier.padding(start = 16.dp, top = 30.dp),
-                    animalType = animalType
-                ) { animalType = it }
-
+                    animalType = uiState.animalType,
+                    onSelected = {
+                        viewModel.updateAnimalType(it)
+                    })
             }
-
             Button(
                 modifier = Modifier
                     .padding(bottom = 50.dp)
@@ -140,23 +157,24 @@ fun RegisterScreen(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 onClick = {
-                    viewModel.addAnimal(
-                        url = url,
-                        name = reporterName,
-                        state = animalType,
-                        breed = "",
-                        address = address
+                    val request = RequestAddAnimalDto(
+                        id = 0,
+                        url = uiState.url,
+                        name = uiState.reporterName,
+                        state = uiState.animalType,
+                        breed = uiState.animalName,
+                        address = uiState.address
                     )
-                }
-            ) {
+                    viewModel.postAddAnimal(request)
+                }) {
                 Text(
-                    text = "등록하기",
-                    style = typography.semiBold.copy(fontSize = 18.sp)
+                    text = "등록하기", style = typography.semiBold.copy(fontSize = 18.sp)
                 )
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun RegisterScreenPreview() {
