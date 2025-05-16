@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.home.component
+package com.example.kuitandroidapiexample.ui.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,16 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.example.kuitandroidapiexample.R
-import com.example.kuitandroidapiexample.common.TagChip
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
-import com.example.kuitandroidapiexample.model.AnimalType
+import com.example.kuitandroidapiexample.ui.common.TagChip
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalUiState
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 
 @Composable
 fun AnimalItem(
     modifier: Modifier = Modifier,
-    animalData: ResponseAnimalDto,
+    animalData: AnimalUiState,
     navigateToDetail: () -> Unit = {}
 ) {
     Row(
@@ -52,12 +51,12 @@ fun AnimalItem(
         ) {
             Text(
                 modifier = Modifier.padding(start = 1.dp),
-                text = animalData.name,
+                text = animalData.animalName,
                 style = typography.semiBold.copy(fontSize = 18.sp)
             )
             TagChip(
                 modifier = Modifier.padding(top = 10.dp, start = 1.dp),
-                animalType = animalData.state
+                animalType = animalData.animalType
             )
             Row(
                 modifier = Modifier.padding(top = 31.dp),
@@ -84,14 +83,14 @@ fun AnimalItem(
 @Preview(showBackground = true)
 @Composable
 private fun AnimalItemPreview() {
-    AnimalItem(
-        animalData = ResponseAnimalDto(
-            id = 6,
-            url = "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_640.jpg",
-            name = "점박이",
-            state = AnimalType.PROTECT,
-            breed = "",
-            address = "서울특별시 광진구 구의동"
-        )
-    )
+//    AnimalItem(
+//        animalData = ResponseAnimalDto(
+//            id = 6,
+//            url = "https://cdn.pixabay.com/photo/2018/05/26/18/06/dog-3431913_640.jpg",
+//            name = "점박이",
+//            state = AnimalType.PROTECT,
+//            breed = "",
+//            address = "서울특별시 광진구 구의동"
+//        )
+//    )
 }
