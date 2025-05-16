@@ -1,7 +1,5 @@
 package com.example.kuitandroidapiexample.ui.home.screen
 
-
-import AnimalListUiState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.kuitandroidapiexample.data.AnimalRepository
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUistate
 import kotlinx.coroutines.flow.MutableStateFlow

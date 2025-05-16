@@ -1,17 +1,17 @@
 package com.example.kuitandroidapiexample.ui.home.viewmodel
 
-import AnimalListUiState
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.kuitandroidapiexample.data.AnimalRepository
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.ServicePool.animalService
 
 import com.example.kuitandroidapiexample.data.dto.response.*
 import com.example.kuitandroidapiexample.data.dto.request.*
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalListUiState
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import kotlinx.coroutines.launch
 

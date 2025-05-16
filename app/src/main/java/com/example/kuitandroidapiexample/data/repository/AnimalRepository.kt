@@ -1,5 +1,4 @@
-// data/AnimalRepository.kt
-package com.example.kuitandroidapiexample.data
+package com.example.kuitandroidapiexample.data.repository
 
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
