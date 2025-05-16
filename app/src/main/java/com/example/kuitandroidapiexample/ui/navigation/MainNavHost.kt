@@ -1,14 +1,22 @@
 package com.example.kuitandroidapiexample.ui.navigation
 
+import RegisterScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.kuitandroidapiexample.App
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
-import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
+
 
 @Composable
 fun MainNavHost(
@@ -16,7 +24,13 @@ fun MainNavHost(
 ) {
     val navController = rememberNavController()
 
-    // 7주차 실습 코드
+    val context = LocalContext.current.applicationContext as App
+    val viewModel: AnimalViewModel = viewModel(
+        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
+    )
+    val detailViewModel: AnimalDetailViewModel = viewModel(
+        factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
+    )
 
     NavHost(
         navController = navController,
@@ -29,7 +43,7 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
-//                viewModel = viewModel
+                viewModel = viewModel
             )
         }
         composable<Route.Register> {
@@ -42,10 +56,15 @@ fun MainNavHost(
         composable<Route.Detail> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Route.Detail>()
 
+            val viewModel: AnimalViewModel = viewModel(
+                factory = AnimalViewModelFactory(context.appContainer.provideRepository())
+            )
+
             DetailScreen(
                 padding = padding,
                 index = args.index,
-                navigateToBack = { navController.navigateUp() }
+                navigateToBack = { navController.navigateUp() },
+                viewModel = detailViewModel
             )
         }
     }

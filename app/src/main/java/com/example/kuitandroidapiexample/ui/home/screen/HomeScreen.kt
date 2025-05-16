@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,9 +42,12 @@ fun HomeScreen(
     navigateToDetail: (Int) -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
+
+
+
     val lazyState = rememberLazyListState()
-    val response by viewModel.animalListState
-    val animals = response?.data.orEmpty()
+    val uiState by viewModel.uiState
+    val animals = uiState.animalList
 
     LaunchedEffect(Unit) {
         viewModel.getTotalAnimalList()
