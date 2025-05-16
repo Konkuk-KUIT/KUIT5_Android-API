@@ -20,19 +20,18 @@ import kotlinx.coroutines.launch
 class AnimalViewModel(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
-//    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
     private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
     val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
 
-    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
+    /*private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
     val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
+*/
+
 
     private val _addAnimalState = mutableStateOf<Boolean?>(null)
     val addAnimalState: State<Boolean?> get() = _addAnimalState
 
-    private val _deleteAnimalState = mutableStateOf<Boolean?>(null)
-    val deleteAnimalState: State<Boolean?> get() = _deleteAnimalState
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
@@ -46,66 +45,11 @@ class AnimalViewModel(
         }
     }
 
-    fun getAnimalDetail(id: Int) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.getAnimalDetail(id)
-            }.onSuccess { data ->
-                _animalDetailState.value = data
-            }.onFailure { error ->
-                Log.e("getAnimalDetail", error.message ?: "Unknown error")
-            }
-        }
-    }
 
-    fun postAddAnimal(request: RequestAddAnimalDto) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.postAddAnimal(request)
-            }.onSuccess { data ->
-                _addAnimalState.value = true
-            }.onFailure { error ->
-                Log.e("postAddAnimal", error.message ?: "Unknown error")
-            }
-        }
+    class AnimalViewModelFactory(
+        private val animalRepository: AnimalRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T =
+            AnimalViewModel(animalRepository) as T
     }
-
-    fun deleteAnimal(id: Int) {
-        viewModelScope.launch {
-            runCatching {
-                animalService.deleteAnimal(id)
-            }.fold(
-                onSuccess = { data ->
-                    _deleteAnimalState.value = true
-                },
-                onFailure = { error ->
-                    Log.e("deleteAnimal", error.message ?: "Unknown error")
-                }
-            )
-        }
-    }
-
-    fun addAnimal(
-        url: String,
-        name: String,
-        state: AnimalType,
-        breed: String,
-        address: String
-    ) {
-        val request = RequestAddAnimalDto(
-            id = 1,
-            url = url,
-            name = name,
-            state = state,
-            breed = breed,
-            address = address
-        )
-        postAddAnimal(request)
-    }
-}
-
-class AnimalViewModelFactory(
-    private val animalRepository: AnimalRepository
-): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>) : T = AnimalViewModel(animalRepository) as T
 }
