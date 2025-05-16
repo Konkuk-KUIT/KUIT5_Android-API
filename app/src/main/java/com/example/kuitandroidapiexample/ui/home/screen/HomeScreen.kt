@@ -1,6 +1,6 @@
 package com.example.kuitandroidapiexample.ui.home.screen
 
-import android.util.Log
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
@@ -42,6 +43,7 @@ fun HomeScreen(
     navigateToDetail: (Int) -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
+
     val lazyState = rememberLazyListState()
     val response by viewModel.animalListState
     val animals = response?.data.orEmpty()

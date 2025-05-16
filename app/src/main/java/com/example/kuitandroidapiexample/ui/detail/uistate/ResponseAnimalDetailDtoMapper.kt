@@ -7,7 +7,8 @@ fun ResponseAnimalDetailDto.toUistate() = AnimalDetailUiState(
     animalName = this.breed,
     animalType = this.state,
     address = this.address,
-    reporterName = this.name
+    reporterName = this.name,
+    isDelete = false
 
 
 )

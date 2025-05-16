@@ -4,8 +4,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
+
 }
+
+
 
 val properties = Properties().apply {
     load(project.rootProject.file("local.properties").inputStream())
@@ -41,7 +44,13 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -69,6 +78,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+
     // navigation
     implementation(libs.androidx.navigation.compose)
 
@@ -90,4 +100,6 @@ dependencies {
 
 
 
+
 }
+

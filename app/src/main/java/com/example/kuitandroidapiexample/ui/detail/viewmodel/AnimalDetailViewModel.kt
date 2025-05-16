@@ -10,6 +10,7 @@ import com.example.kuitandroidapiexample.ui.detail.uistate.toUistate
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AnimalDetailViewModel(
@@ -32,13 +33,34 @@ class AnimalDetailViewModel(
         }
 
     }
+
+    fun deleteAnimal(id: Int) {
+        viewModelScope.launch {
+            animalRepository.deleteAnimal(id).fold(
+                onSuccess = {
+                    _uiState.update {
+                        it.copy(isDelete = true)
+
+                    }
+                },
+                onFailure = { error ->
+                    Log.e("okhttpError", error.message.toString())
+
+
+                }
+            )
+
+        }
+    }
+
+
 }
 
 
-    class AnimalViewModelFactory(
-        private val animalRepository: AnimalRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return AnimalViewModel(animalRepository) as T
-        }
+class AnimalDetailViewModelFactory(
+    private val animalRepository: AnimalRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return AnimalDetailViewModel(animalRepository) as T
     }
+}

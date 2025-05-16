@@ -1,10 +1,10 @@
 package com.example.kuitandroidapiexample
 
 import com.example.kuitandroidapiexample.data.AnimalRepository
-import com.example.kuitandroidapiexample.data.repository.AnimalRepositoryImpl
 import com.example.kuitandroidapiexample.data.ServicePool.animalService
 
-class AppContainer {
+class AppContainer{
+    private fun provideApiService() = animalService
+    fun provideRepository() = AnimalRepository(provideApiService())
 
-    fun provideRepository(): AnimalRepository = AnimalRepositoryImpl(animalService)
 }
