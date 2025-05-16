@@ -24,7 +24,7 @@ fun MainNavHost(
 
     val context = LocalContext.current.applicationContext as App
     val viewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModelFactory(context.appContainer.provideApiService())
+        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
     )
     NavHost(
         navController = navController,
@@ -49,6 +49,10 @@ fun MainNavHost(
         }
         composable<Route.Detail> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Route.Detail>()
+
+            val viewModel: AnimalViewModel = viewModel(
+                factory = AnimalViewModelFactory(context.appContainer.provideRepository())
+            )
 
             DetailScreen(
                 padding = padding,
