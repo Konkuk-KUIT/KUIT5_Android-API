@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
-import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,6 +18,12 @@ class AnimalDetailViewModel(
 
     private val _uiState = MutableStateFlow(AnimalDetailUiState())
     val uiState = _uiState.asStateFlow()
+
+    fun resetIsDeleted() {
+        _uiState.update {
+            it.copy(isDelete = false)
+        }
+    }
 
     fun getAnimalDetail(id: Int) {
         viewModelScope.launch {

@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.ui.detail.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +41,7 @@ import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
+import kotlinx.coroutines.launch
 
 @Composable
 fun DetailScreen(
@@ -49,12 +52,19 @@ fun DetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+
+    Log.d("viewModel", viewModel.hashCode().toString())
+    Log.d("isDelete", uiState.isDelete.toString())
+    Log.d("uiStatel", uiState.hashCode().toString())
+
     LaunchedEffect(index) {
         viewModel.getAnimalDetail(index)
     }
 
     LaunchedEffect(uiState.isDelete) {
         if (uiState.isDelete == true) {
+            Log.d("key", "detailscreen")
+            viewModel.resetIsDeleted()
             navigateToBack()
         }
     }
