@@ -28,7 +28,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
@@ -42,8 +44,7 @@ fun HomeScreen(
     viewModel: AnimalViewModel = viewModel()
 ) {
     val lazyState = rememberLazyListState()
-    val response by viewModel.animalListState
-    val animals = response?.data.orEmpty()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getTotalAnimalList()
@@ -75,10 +76,10 @@ fun HomeScreen(
                 contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(animals) { animal ->
+                items(uiState.animalList) { animalDto ->
                     AnimalItem(
-                        animalData = animal,
-                        navigateToDetail = { navigateToDetail(animal.id) }
+                        animalData = animalDto,
+                        navigateToDetail = { navigateToDetail(animalDto.id) }
                     )
                 }
             }
