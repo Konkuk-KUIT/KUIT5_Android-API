@@ -1,0 +1,44 @@
+package com.example.kuitandroidapiexample.ui.detail.viewmodel
+
+import android.util.Log
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.kuitandroidapiexample.data.AnimalRepository
+import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
+import com.example.kuitandroidapiexample.ui.detail.uistate.toUistate
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class AnimalDetailViewModel(
+    private val animalRepository: AnimalRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(AnimalDetailUiState())
+    val uiState = _uiState.asStateFlow()
+
+    fun getAnimalDetail(id: Int) {
+        viewModelScope.launch {
+            animalRepository.getAnimal(id).fold(
+                onSuccess = { data ->
+                    _uiState.value = data.data.toUistate()
+                },
+                onFailure = { error ->
+                    Log.e("okhttpError", error.message.toString())
+                }
+            )
+        }
+
+    }
+}
+
+
+    class AnimalViewModelFactory(
+        private val animalRepository: AnimalRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return AnimalViewModel(animalRepository) as T
+        }
+    }
