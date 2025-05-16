@@ -18,11 +18,13 @@ class RegisterViewModel(
     private val _uiState = MutableStateFlow(RegisterUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun updateUrl(url: String) = _uiState.update { it.copy(url = url) }
-    fun updateAnimalName(name: String) = _uiState.update { it.copy(animalName = name) }
-    fun updateAddress(address: String) = _uiState.update { it.copy(address = address) }
-    fun updateReporterName(name: String) = _uiState.update { it.copy(reporterName = name) }
-    fun updateAnimalType(type: AnimalType) = _uiState.update { it.copy(animalType = type) }
+    fun updateUrl(url: String) {
+        _uiState.update { it.copy(url = url) }
+    }
+    fun updateAnimalName(name: String) { _uiState.update { it.copy(animalName = name) }}
+    fun updateAddress(address: String) { _uiState.update { it.copy(address = address) }}
+    fun updateReporterName(name: String) { _uiState.update { it.copy(reporterName = name) }}
+    fun updateAnimalType(type: AnimalType) { _uiState.update { it.copy(animalType = type) }}
 
     fun postAnimal() {
         val state = _uiState.value
