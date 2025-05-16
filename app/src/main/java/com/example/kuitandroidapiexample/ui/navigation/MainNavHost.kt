@@ -1,9 +1,12 @@
 package com.example.kuitandroidapiexample.ui.navigation
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHost
@@ -19,6 +22,9 @@ import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModel
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModelFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainNavHost(
@@ -27,21 +33,40 @@ fun MainNavHost(
     val navController = rememberNavController()
 
     val context = LocalContext.current.applicationContext as App
-    val viewModel:AnimalViewModel = viewModel(
+    val viewModel: AnimalViewModel = viewModel(
         factory = AnimalViewModelFactory(context.appContainer.provideRepository())
     )
-    val detailViewModel : AnimalDetailViewModel = viewModel(
+    val detailViewModel: AnimalDetailViewModel = viewModel(
         factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
     )
-            NavHost(
+    val registerViewModel: RegisterViewModel = viewModel(
+        factory = RegisterViewModelFactory(context.appContainer.provideRepository())
+    )
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        scope.launch {
+            detailViewModel.uiState.collect {
+                if(it.isDelete) {
+                    Log.d("s", "s")
+                }else {
+                    Log.d("it.toString()" ,it.toString())
+                }
+            }
+        }
+    }
+
+    NavHost(
         navController = navController,
         startDestination = Route.Home
     ) {
         composable<Route.Home> {
             HomeScreen(
                 padding = padding,
-                navigateToRegister = { navController.navigate(Route.Register) },
+                navigateToRegister = {
+                    navController.navigate(Route.Register) {}
+                },
                 navigateToDetail = { index ->
+
                     navController.navigate(Route.Detail(index))
                 },
                 viewModel = viewModel
@@ -51,7 +76,7 @@ fun MainNavHost(
             RegisterScreen(
                 padding = padding,
                 navigateToBack = { navController.navigateUp() },
-                viewModel = viewModel
+                viewModel = registerViewModel
             )
         }
         composable<Route.Detail> { navBackStackEntry ->
