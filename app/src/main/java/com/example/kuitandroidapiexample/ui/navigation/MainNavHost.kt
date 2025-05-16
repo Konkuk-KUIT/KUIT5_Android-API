@@ -14,7 +14,7 @@ import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewMod
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
 
 @Composable
@@ -27,9 +27,17 @@ fun MainNavHost(
     val viewModel: AnimalViewModel = viewModel(
         factory = AnimalViewModelFactory(context.appContainer.provideRepository())
     )
-    val detailViewModel : AnimalDetailViewModel = viewModel(
+    val detailViewModel: AnimalDetailViewModel = viewModel(
         factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
     )
+
+    val animalVm: AnimalViewModel = viewModel(
+        modelClass = AnimalViewModel::class.java,
+        factory = AnimalViewModelFactory(
+            context.appContainer.provideRepository()
+        )
+    )
+
 
     NavHost(
         navController = navController,
@@ -48,9 +56,7 @@ fun MainNavHost(
         composable<Route.Register> {
             RegisterScreen(
                 padding = padding,
-                navigateToBack = { navController.navigateUp() },
-                viewModel = viewModel
-
+                navigateToBack = { navController.navigateUp() }
             )
         }
         composable<Route.Detail> { navBackStackEntry ->
