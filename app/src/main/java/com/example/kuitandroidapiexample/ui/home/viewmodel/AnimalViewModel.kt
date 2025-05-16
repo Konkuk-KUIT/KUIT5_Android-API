@@ -12,24 +12,26 @@ import com.example.kuitandroidapiexample.data.dto.request.RequestDto
 import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
 import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
+import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
+import com.example.kuitandroidapiexample.ui.detail.uistate.toUiState
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalListUiState
+import com.example.kuitandroidapiexample.ui.home.uistate.toUiState
 
-import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class AnimalViewModel(
-    private val animalService: AnimalService
+    private val animalRepository: AnimalRepository
 ) : ViewModel() {
     //private val animalService: AnimalService by lazy { ServicePool.animalService }
 
-    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
-    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
-
-    private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
-    val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
 
     private val _animalAddState = mutableStateOf<RequestAddAnimalDto?>(null)
     val animalAddState: State<RequestAddAnimalDto?> get() = _animalAddState
@@ -37,29 +39,34 @@ class AnimalViewModel(
     private val _registerSuccess = mutableStateOf(false)
     val registerSuccess: State<Boolean> get() = _registerSuccess
 
-    private val _animalDeleteState = mutableStateOf<ResponseAnimalDetailDto?>(null)
-    val animalDeleteState: State<ResponseAnimalDetailDto?> get() = _animalDeleteState
+    private val _uiState = MutableStateFlow(AnimalListUiState())
+    val uiState = _uiState.asStateFlow()
 
     fun getTotalAnimalList() {
         viewModelScope.launch {
-            runCatching {
-                animalService.getTotalAnimalList()
-            }
-                .onSuccess { data ->
-                    _animalListState.value = data
+            animalRepository.getTotalAnimal()
+                .onSuccess { baseResponse ->
+                    _uiState.value = AnimalListUiState(
+                        animals = baseResponse.data.map { it.toUiState() }
+                    )
                 }
                 .onFailure { error ->
-                    //Log.e("getTotalAnimalList", error.message ?: "Unknown error")
                     Log.e("getTotalAnimalList", "API call failed", error)
                 }
         }
-
     }
 
-    fun getAnimal(id: Int) {
+    class AnimalViewModelFactory(
+        private val animalRepository: AnimalRepository
+    ): ViewModelProvider.Factory{
+        override fun <T : ViewModel> create(modelClass: Class<T>): T = AnimalViewModel(animalRepository) as T
+    }
+
+
+    /*fun getAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                animalService.getAnimal(id)
+                animalRepository.getAnimal(id)
             }
                 .onSuccess { data ->
                     _animalDetailState.value = data
@@ -73,7 +80,7 @@ class AnimalViewModel(
     fun deleteAnimal(id: Int) {
         viewModelScope.launch {
             runCatching {
-                animalService.deleteAnimal(id)
+                animalRepository.deleteAnimal(id)
             }
                 .onSuccess { data ->
                     _animalDeleteState.value = data
@@ -107,7 +114,7 @@ class AnimalViewModel(
         val requestAddAnimalDto = RequestAddAnimalDto(data = register)
         viewModelScope.launch{
             runCatching {
-                animalService.registerAnimal(requestAddAnimalDto)
+                animalRepository.registerAnimal(requestAddAnimalDto)
             }
                 .onSuccess { data ->
                     _animalAddState.value = requestAddAnimalDto
@@ -116,11 +123,6 @@ class AnimalViewModel(
                     Log.e("registerAnimal", error.message ?: "Unknown error")
                 }
         }
-    }
+    } */
 
-    class AnimalViewModelFactory(
-        private val animalService: AnimalService
-    ): ViewModelProvider.Factory{
-        override fun <T : ViewModel> create(modelClass: Class<T>): T = AnimalViewModel(animalService) as T
-    }
 }
