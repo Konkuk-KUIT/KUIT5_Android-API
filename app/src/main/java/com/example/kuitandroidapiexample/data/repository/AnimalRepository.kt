@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.data.repository
 
+import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.service.AnimalService
 
 class AnimalRepository(
@@ -11,5 +12,6 @@ class AnimalRepository(
 
     suspend fun getAnimals() = runCatching { animalService.getTotalAnimalList() }
 
-//    suspend fun postAnimal(animal: Animal)
+    suspend fun postAnimal(request: RequestAddAnimalDto) =
+        runCatching { animalService.postAddAnimal(request) }
 }
