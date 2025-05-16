@@ -31,12 +31,12 @@ import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 fun AnimalItem(
     modifier: Modifier = Modifier,
     animalData: ResponseAnimalDto,
-    navigateToDetail: () -> Unit = {}
+    navigateToDetail: (Int) -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { navigateToDetail() },
+            .clickable { navigateToDetail(animalData.id) },
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         AsyncImage(
@@ -92,6 +92,7 @@ private fun AnimalItemPreview() {
             state = AnimalType.PROTECT,
             breed = "",
             address = "서울특별시 광진구 구의동"
-        )
+        ),
+        navigateToDetail = {}
     )
 }
