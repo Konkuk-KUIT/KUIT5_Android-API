@@ -4,13 +4,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kuitandroidapiexample.App
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModel
+import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModelFactory
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.delay
@@ -20,17 +24,21 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
-) {
+    viewModel: RegisterViewModel = viewModel(
+        factory = RegisterViewModelFactory(
+            (LocalContext.current.applicationContext as App).appContainer.provideRepository()
+        )
+    )
+){
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("") }
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val addAnimalState by viewModel.addAnimalState
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     // 스낵바 + 뒤로가기
     LaunchedEffect(addAnimalState) {
@@ -40,7 +48,7 @@ fun RegisterScreen(
                     message = "등록이 완료되었습니다.",
                     duration = SnackbarDuration.Short
                 )
-                delay(2000)
+                
                 navigateToBack()
             }
         }

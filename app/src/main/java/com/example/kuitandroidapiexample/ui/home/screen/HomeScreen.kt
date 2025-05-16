@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.ui.home.screen
 
 
+import AnimalListUiState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.ViewModel
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
@@ -44,9 +45,11 @@ fun HomeScreen(
     viewModel: AnimalViewModel = viewModel()
 ) {
 
+
+
     val lazyState = rememberLazyListState()
-    val response by viewModel.animalListState
-    val animals = response?.data.orEmpty()
+    val uiState by viewModel.uiState
+    val animals = uiState.animalList
 
     LaunchedEffect(Unit) {
         viewModel.getTotalAnimalList()
