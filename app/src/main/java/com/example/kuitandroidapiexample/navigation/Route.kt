@@ -11,4 +11,7 @@ sealed interface Route {
 
     @Serializable
     data class Detail(val index: Int) : Route
+
+    @Serializable
+    data object Preference : Route
 }

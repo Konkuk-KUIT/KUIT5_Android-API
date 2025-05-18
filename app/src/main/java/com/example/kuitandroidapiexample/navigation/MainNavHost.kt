@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.kuitandroidapiexample.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.home.screen.HomeScreen
+import com.example.kuitandroidapiexample.home.screen.PreferencesScreen
 import com.example.kuitandroidapiexample.register.screen.RegisterScreen
 
 @Composable
@@ -26,7 +27,8 @@ fun MainNavHost(
                 navigateToRegister = { navController.navigate(Route.Register) },
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
-                }
+                },
+                navigateToPref = {navController.navigate(Route.Preference)}
             )
         }
         composable<Route.Register> {
@@ -44,6 +46,9 @@ fun MainNavHost(
                 index = args.index,
                 navigateToBack = { navController.navigateUp() }
             )
+        }
+        composable<Route.Preference>{
+            PreferencesScreen()
         }
     }
 
