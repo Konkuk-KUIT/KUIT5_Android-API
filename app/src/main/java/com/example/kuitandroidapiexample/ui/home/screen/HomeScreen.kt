@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.ui.home.screen
 
+import android.R.attr.onClick
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,11 +17,13 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,11 +42,15 @@ fun HomeScreen(
     padding: PaddingValues,
     navigateToRegister: () -> Unit = {},
     navigateToDetail: (Int) -> Unit = {},
+    navigateToPref: () -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
+
+
+
     val lazyState = rememberLazyListState()
-    val response by viewModel.animalListState
-    val animals = response?.data.orEmpty()
+    val uiState by viewModel.uiState
+    val animals = uiState.animalList
 
     LaunchedEffect(Unit) {
         viewModel.getTotalAnimalList()
@@ -87,6 +94,7 @@ fun HomeScreen(
             }
         }
 
+
         IconButton(
             modifier = Modifier
                 .padding(end = 17.dp, bottom = 20.dp)
@@ -101,6 +109,24 @@ fun HomeScreen(
                     .size(36.dp),
                 imageVector = Icons.Filled.Add,
                 contentDescription = "등록하기 버튼",
+                tint = colors.white
+            )
+        }
+
+        IconButton(
+            modifier = Modifier
+                .padding(start = 17.dp, bottom = 20.dp)
+                .size(56.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(colors.orange)
+                .align(Alignment.BottomStart),
+            onClick = navigateToPref
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(36.dp),
+                imageVector = Icons.Filled.Build,
+                contentDescription = "pref 버튼",
                 tint = colors.white
             )
         }
