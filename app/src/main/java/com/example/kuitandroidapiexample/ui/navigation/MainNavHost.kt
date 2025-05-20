@@ -14,6 +14,7 @@ import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
+import com.example.kuitandroidapiexample.ui.home.screen.PreferencesScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 
@@ -43,6 +44,7 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
+                navigateToPref = { navController.navigate(Route.Preferences) },
                 viewModel = viewModel
             )
         }
@@ -65,6 +67,12 @@ fun MainNavHost(
                 index = args.index,
                 navigateToBack = { navController.navigateUp() },
                 viewModel = detailViewModel
+            )
+        }
+
+        composable<Route.Preferences>{
+            PreferencesScreen(
+
             )
         }
     }
