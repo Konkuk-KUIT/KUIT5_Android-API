@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ fun HomeScreen(
     padding: PaddingValues,
     navigateToRegister: () -> Unit = {},
     navigateToDetail: (Int) -> Unit = {},
+    navigateToPref: () -> Unit = {},
     viewModel: AnimalViewModel = viewModel()
 ) {
     val lazyState = rememberLazyListState()
@@ -98,6 +100,24 @@ fun HomeScreen(
                     .size(36.dp),
                 imageVector = Icons.Filled.Add,
                 contentDescription = "등록하기 버튼",
+                tint = colors.white
+            )
+        }
+
+        IconButton(
+            modifier = Modifier
+                .padding(end = 17.dp, bottom = 20.dp)
+                .size(56.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .background(colors.orange)
+                .align(Alignment.BottomStart),
+            onClick = navigateToPref
+        ) {
+            Icon(
+                modifier = Modifier
+                    .size(36.dp),
+                imageVector = Icons.Filled.Build,
+                contentDescription = "pref 버튼",
                 tint = colors.white
             )
         }
