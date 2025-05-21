@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample.data
 
 import com.example.kuitandroidapiexample.BuildConfig
+import com.example.kuitandroidapiexample.BuildConfig.BASE_URL
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
