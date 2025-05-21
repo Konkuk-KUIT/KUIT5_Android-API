@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.register.componet
+package com.example.kuitandroidapiexample.ui.register.component
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -59,7 +59,6 @@ fun FindUTextField(
             textStyle = typography.regular.copy(fontSize = 14.sp, color = colors.gray100)
         )
     }
-
 }
 
 @Preview(showBackground = true)
