@@ -1,5 +1,6 @@
 package com.example.kuitandroidapiexample.detail.screen
 
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,13 +47,16 @@ fun DetailScreen(
     viewModel: AnimalViewModel = viewModel()
 ) {
     val response by viewModel.animalDetailState
-    val animalDetail = response?.data
-
+    val animalDetail by viewModel.animalDetailState
     val deleteAnimal by viewModel.deleteAnimalState
+    //val isInPreview = LocalIndication.current
+
 
     LaunchedEffect(index) {
         viewModel.getAnimalDetail(index)
     }
+
+
 
     LaunchedEffect(deleteAnimal) {
         if (deleteAnimal == true) {
@@ -152,6 +156,7 @@ fun DetailScreen(
                         .padding(10.dp)
                         .clickable {
                             viewModel.deleteAnimal(index)
+                            navigateToBack()
                         },
                 ) {
                     Text(

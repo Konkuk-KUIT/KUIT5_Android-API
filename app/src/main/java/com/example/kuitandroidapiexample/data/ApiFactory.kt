@@ -20,11 +20,16 @@ object ApiFactory {
         .addInterceptor(loggingInterceptor)
         .build()
 
+    private val json = Json {
+        ignoreUnknownKeys = true   // 모르는 키(message, id 등) 모두 무시
+        isLenient = true
+    }
+
     val retrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 
