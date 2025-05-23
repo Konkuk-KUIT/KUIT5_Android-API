@@ -12,7 +12,9 @@ import com.example.kuitandroidapiexample.App
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
+import com.example.kuitandroidapiexample.ui.home.screen.DataStoreScreen
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
+import com.example.kuitandroidapiexample.ui.home.screen.PreferenceScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
@@ -42,6 +44,8 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
+//                navigateToPref = { navController.navigate(Route.Preference) },
+                navigateToPref = { navController.navigate(Route.DataStore) },
                 viewModel = viewModel
             )
         }
@@ -65,8 +69,15 @@ fun MainNavHost(
                 viewModel = viewModel(
                     factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
                 )
-
             )
+        }
+
+//        composable<Route.Preference> {
+//            PreferenceScreen()
+//        }
+
+        composable<Route.DataStore> {
+            DataStoreScreen()
         }
     }
 

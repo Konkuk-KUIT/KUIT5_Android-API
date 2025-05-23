@@ -20,7 +20,7 @@ class AnimalRegisterViewModel(
     private val _uiState = MutableStateFlow(AnimalRegisterUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun postAddAnimal(request: RequestAddAnimalDto) {
+    fun postAddAnimal(request: RequestAddAnimalDto) {   
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
