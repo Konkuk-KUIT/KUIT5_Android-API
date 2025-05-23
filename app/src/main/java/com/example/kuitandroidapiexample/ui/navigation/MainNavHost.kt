@@ -3,6 +3,7 @@ package com.example.kuitandroidapiexample.ui.navigation
 import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,6 +20,7 @@ import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
+import com.example.kuitandroidapiexample.ui.home.screen.PreferencesScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
@@ -46,10 +48,10 @@ fun MainNavHost(
     LaunchedEffect(Unit) {
         scope.launch {
             detailViewModel.uiState.collect {
-                if(it.isDelete) {
+                if (it.isDelete) {
                     Log.d("s", "s")
-                }else {
-                    Log.d("it.toString()" ,it.toString())
+                } else {
+                    Log.d("it.toString()", it.toString())
                 }
             }
         }
@@ -69,6 +71,7 @@ fun MainNavHost(
 
                     navController.navigate(Route.Detail(index))
                 },
+                navigateToPref = { navController.navigate(Route.Preference) },
                 viewModel = viewModel
             )
         }
@@ -87,6 +90,9 @@ fun MainNavHost(
                 navigateToBack = { navController.navigateUp() },
                 viewModel = detailViewModel
             )
+        }
+        composable<Route.Preference> {
+            PreferencesScreen()
         }
     }
 }
