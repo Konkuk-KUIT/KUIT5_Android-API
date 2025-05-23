@@ -12,16 +12,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
+import com.example.kuitandroidapiexample.util.DataStoreManager
 import com.example.kuitandroidapiexample.util.SharedPreferenceManager
+import kotlinx.coroutines.launch
 
 @Composable
 fun PreferencesScreen(modifier: Modifier = Modifier){
     var input by remember {mutableStateOf("")}
     var result by remember {mutableStateOf("")}
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -36,7 +40,10 @@ fun PreferencesScreen(modifier: Modifier = Modifier){
 
         Button(
             onClick = {
-                SharedPreferenceManager.saveValue(context = context, key = "sample_key", value = input)
+                //SharedPreferenceManager.saveValue(context = context, key = "sample_key", value = input)
+                scope.launch {
+                    DataStoreManager.saveValue(context, "sample_key", input)
+                }
             }
         ){
             Text("pref 저장")
@@ -44,7 +51,10 @@ fun PreferencesScreen(modifier: Modifier = Modifier){
 
         Button(
             onClick = {
-                SharedPreferenceManager.deleteValue(context = context, key = "sample_key")
+                //SharedPreferenceManager.deleteValue(context = context, key = "sample_key")
+                scope.launch {
+                    DataStoreManager.deleteValue(context, "sample_key")
+                }
             }
         ){
             Text("pref 삭제")
@@ -52,8 +62,10 @@ fun PreferencesScreen(modifier: Modifier = Modifier){
 
         Button(
             onClick = {
-                result =
-                    SharedPreferenceManager.getValue(context = context, key = "sample_key") ?: "없음"
+                //result = SharedPreferenceManager.getValue(context = context, key = "sample_key") ?: "없음"
+                scope.launch {
+                    result = DataStoreManager.getValue(context, "sample_key") ?: "없음"
+                }
             }
         ){
             Text("pref 조회")
