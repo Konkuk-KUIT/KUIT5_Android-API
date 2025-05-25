@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
@@ -41,7 +42,7 @@ fun HomeScreen(
     navigateToRegister: () -> Unit = {},
     navigateToDetail: (Int) -> Unit = {},
     navigateToPref:()->Unit={},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalViewModel = hiltViewModel()
 ) {
     val lazyState = rememberLazyListState()
     val response by viewModel.animalListState
