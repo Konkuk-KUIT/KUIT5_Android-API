@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.ServicePool
 import com.example.kuitandroidapiexample.data.ServicePool.animalService
@@ -15,9 +14,12 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.ui.model.AnimalType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnimalViewModel(
+@HiltViewModel
+class AnimalViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 
@@ -43,13 +45,5 @@ class AnimalViewModel(
                 Log.e("getTotalAnimalList", error.message ?: "Unknown error")
             }
         }
-    }
-
-
-    class AnimalViewModelFactory(
-        private val animalRepository: AnimalRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T =
-            AnimalViewModel(animalRepository) as T
     }
 }
