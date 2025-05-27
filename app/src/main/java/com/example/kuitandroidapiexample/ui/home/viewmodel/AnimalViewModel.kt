@@ -5,20 +5,26 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.kuitandroidapiexample.data.ServicePool
-import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
-import com.example.kuitandroidapiexample.data.dto.response.BaseResponse
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDetailDto
-import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
-import com.example.kuitandroidapiexample.data.service.AnimalService
+import com.example.kuitandroidapiexample.data.repository.AnimalRepository
+import com.example.kuitandroidapiexample.data.ServicePool.animalService
+
+import com.example.kuitandroidapiexample.data.dto.response.*
+import com.example.kuitandroidapiexample.data.dto.request.*
+import com.example.kuitandroidapiexample.ui.home.uistate.AnimalListUiState
 import com.example.kuitandroidapiexample.ui.model.AnimalType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnimalViewModel : ViewModel() {
-    private val animalService: AnimalService by lazy { ServicePool.animalService }
 
-    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
-    val animalListState: State<BaseResponse<List<ResponseAnimalDto>>?> get() = _animalListState
+@HiltViewModel
+
+class AnimalViewModel @Inject constructor(
+    private val animalRepository: AnimalRepository
+) : ViewModel() {
+
+    private val _uiState = mutableStateOf(AnimalListUiState())
+    val uiState: State<AnimalListUiState> get() = _uiState
 
     private val _animalDetailState = mutableStateOf<BaseResponse<ResponseAnimalDetailDto>?>(null)
     val animalDetailState: State<BaseResponse<ResponseAnimalDetailDto>?> get() = _animalDetailState
@@ -32,11 +38,9 @@ class AnimalViewModel : ViewModel() {
     fun getTotalAnimalList() {
         viewModelScope.launch {
             runCatching {
-                animalService.getTotalAnimalList()
-            }.onSuccess { data ->
-                _animalListState.value = data
-            }.onFailure { error ->
-                Log.e("getTotalAnimalList", "실패 원인: ${error.localizedMessage}", error)
+                animalRepository.getTotalAnimalList().getOrThrow()
+            }.onSuccess { response ->
+                _uiState.value = AnimalListUiState(animalList = response.data)
             }
         }
     }
@@ -102,8 +106,13 @@ class AnimalViewModel : ViewModel() {
     }
 }
 
-//class AnimalViewModelFactory(
-//    private val animalService: AnimalService
-//): ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T =AnimalViewModel(animalService) as T
-//}
+
+//자동 주입을 했기 때문에 필요없음
+/* class AnimalViewModelFactory(
+    private val animalRepository: AnimalRepository
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return AnimalViewModel(animalRepository) as T
+    }
+}
+*/

@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,10 +30,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.example.kuitandroidapiexample.R
 import com.example.kuitandroidapiexample.ui.common.TagChip
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
@@ -43,20 +47,18 @@ fun DetailScreen(
     padding: PaddingValues,
     index: Int,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalDetailViewModel = hiltViewModel()
 ) {
 
-    val response by viewModel.animalDetailState
-    val animalDetail = response?.data
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val deleteAnimal by viewModel.deleteAnimalState
 
     LaunchedEffect(index) {
         viewModel.getAnimalDetail(index)
     }
 
-    LaunchedEffect(deleteAnimal) {
-        if (deleteAnimal == true) {
+    LaunchedEffect(uiState.isDelete) {
+        if (uiState.isDelete) {
             navigateToBack()
         }
     }
@@ -85,7 +87,7 @@ fun DetailScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(420.dp),
-                model = animalDetail?.url ?: "",
+                model = uiState.url ?: "",
                 contentDescription = "동물 사진"
             )
         }
@@ -98,14 +100,14 @@ fun DetailScreen(
                 .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
         ) {
             Text(
-                text = animalDetail?.name ?: "",
+                text = uiState.animalName ?: "",
                 style = typography.semiBold.copy(fontSize = 24.sp),
                 modifier = Modifier.padding(start = 40.dp, top = 42.dp, bottom = 20.dp)
             )
 
             TagChip(
                 modifier = Modifier.padding(start = 40.dp),
-                animalType = animalDetail?.state ?: AnimalType.PROTECT
+                animalType = uiState.animalType
             )
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -128,7 +130,7 @@ fun DetailScreen(
                     style = typography.semiBold.copy(fontSize = 14.sp, color = colors.orange),
                 )
                 Text(
-                    text = animalDetail?.address ?: "",
+                    text = uiState.address ?: "",
                     style = typography.semiBold.copy(fontSize = 14.sp),
                     modifier = Modifier.align(Alignment.BottomStart)
                 )

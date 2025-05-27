@@ -1,14 +1,22 @@
 package com.example.kuitandroidapiexample.ui.navigation
 
+import RegisterScreen
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.kuitandroidapiexample.KuitApplication
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
+import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
-import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
+import com.example.kuitandroidapiexample.ui.home.screen.PreferencesScreen
+import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
+
+
 
 @Composable
 fun MainNavHost(
@@ -16,7 +24,9 @@ fun MainNavHost(
 ) {
     val navController = rememberNavController()
 
-    // 7주차 실습 코드
+    val context = LocalContext.current.applicationContext as KuitApplication
+    val viewModel: AnimalViewModel = hiltViewModel()
+    val detailViewModel: AnimalDetailViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,
@@ -29,7 +39,8 @@ fun MainNavHost(
                 navigateToDetail = { index ->
                     navController.navigate(Route.Detail(index))
                 },
-//                viewModel = viewModel
+                navigateToPref = { navController.navigate(Route.Preferences) },
+                viewModel = viewModel
             )
         }
         composable<Route.Register> {
@@ -42,10 +53,18 @@ fun MainNavHost(
         composable<Route.Detail> { navBackStackEntry ->
             val args = navBackStackEntry.toRoute<Route.Detail>()
 
+
             DetailScreen(
                 padding = padding,
                 index = args.index,
-                navigateToBack = { navController.navigateUp() }
+                navigateToBack = { navController.navigateUp() },
+                viewModel = detailViewModel
+            )
+        }
+
+        composable<Route.Preferences>{
+            PreferencesScreen(
+
             )
         }
     }
