@@ -2,17 +2,20 @@ package com.example.kuitandroidapiexample.ui.detail.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.detail.uistate.AnimalDetailUiState
 import com.example.kuitandroidapiexample.ui.detail.uistate.toUistate
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnimalDetailViewModel(
+
+@HiltViewModel
+class AnimalDetailViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 
@@ -55,7 +58,8 @@ class AnimalDetailViewModel(
 
 }
 
-
+//수동주입 지움
+/*
 class AnimalDetailViewModelFactory(
     private val animalRepository: AnimalRepository
 ) : ViewModelProvider.Factory {
@@ -63,3 +67,5 @@ class AnimalDetailViewModelFactory(
         return AnimalDetailViewModel(animalRepository) as T
     }
 }
+*/
+

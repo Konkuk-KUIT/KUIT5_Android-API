@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kuitandroidapiexample.ui.home.component.AnimalItem
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
@@ -43,7 +42,7 @@ fun HomeScreen(
     navigateToRegister: () -> Unit = {},
     navigateToDetail: (Int) -> Unit = {},
     navigateToPref: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalViewModel = hiltViewModel()
 ) {
 
 
