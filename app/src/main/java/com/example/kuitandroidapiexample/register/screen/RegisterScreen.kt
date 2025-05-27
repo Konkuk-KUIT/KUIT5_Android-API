@@ -1,37 +1,22 @@
 package com.example.kuitandroidapiexample.register.screen
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.model.AnimalType
 import com.example.kuitandroidapiexample.register.componet.FindUTextField
 import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.register.viewmodel.RegisterViewModel
+import com.example.kuitandroidapiexample.register.viewmodel.RegisterViewModelFactory
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 
@@ -39,7 +24,7 @@ import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
@@ -47,13 +32,12 @@ fun RegisterScreen(
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
-    val addAnimal by viewModel.addAnimalState
-    val snackbarHostState = remember { androidx.compose.material3.SnackbarHostState() }
-    //val coroutineScope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
+    // 등록 성공 시 Snackbar → 뒤로 가기
+    LaunchedEffect(uiState.isSuccess) {
+        if (uiState.isSuccess) {
             val result = snackbarHostState.showSnackbar(
                 message = "등록이 완료되었습니다.",
                 duration = SnackbarDuration.Short
@@ -64,7 +48,6 @@ fun RegisterScreen(
         }
     }
 
-
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
@@ -72,10 +55,9 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .padding(innerPadding)
         ) {
-            Column(
-                modifier = Modifier.matchParentSize()
-            ) {
+            Column(modifier = Modifier.matchParentSize()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -84,9 +66,7 @@ fun RegisterScreen(
                     Text(
                         text = "등록하기",
                         modifier = Modifier.align(Alignment.Center),
-                        style = typography.semiBold.copy(
-                            fontSize = 18.sp
-                        )
+                        style = typography.semiBold.copy(fontSize = 18.sp)
                     )
                 }
 
@@ -118,7 +98,6 @@ fun RegisterScreen(
                     modifier = Modifier.padding(start = 16.dp, top = 30.dp),
                     animalType = animalType
                 ) { animalType = it }
-
             }
 
             Button(
@@ -128,16 +107,14 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .align(Alignment.BottomCenter),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colors.orange
-                ),
+                colors = ButtonDefaults.buttonColors(containerColor = colors.orange),
                 shape = RoundedCornerShape(8.dp),
                 onClick = {
-                    viewModel.addAnimal(
+                    viewModel.registerAnimal(
                         url = url,
                         name = reporterName,
                         state = animalType,
-                        breed = "",
+                        breed = "", // 현재는 고정
                         address = address
                     )
                 }
@@ -148,7 +125,6 @@ fun RegisterScreen(
                 )
             }
         }
-
     }
 }
 
