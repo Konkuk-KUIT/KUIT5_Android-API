@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.dto.request.RequestAddAnimalDto
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.model.AnimalType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 // UI 상태 표현을 위한 데이터 클래스
 data class AnimalRegisterUiState(
@@ -19,7 +21,8 @@ data class AnimalRegisterUiState(
     val errorMessage: String? = null
 )
 
-class RegisterViewModel(
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 

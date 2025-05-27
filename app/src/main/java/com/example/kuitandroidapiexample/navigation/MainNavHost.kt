@@ -3,19 +3,19 @@ package com.example.kuitandroidapiexample.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.kuitandroidapiexample.App
+import com.example.kuitandroidapiexample.KuitApplication
 import com.example.kuitandroidapiexample.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.detail.viewmodel.AnimalDetailViewModel
-import com.example.kuitandroidapiexample.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.home.screen.PreferenceScreen
 import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.register.screen.RegisterScreen
 import com.example.kuitandroidapiexample.register.viewmodel.RegisterViewModel
 import com.example.kuitandroidapiexample.register.viewmodel.RegisterViewModelFactory
@@ -27,17 +27,14 @@ fun MainNavHost(
 ) {
     val navController = rememberNavController()
 
-    val context = LocalContext.current.applicationContext as App
-    val viewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
-    )
-    val detailViewModel : AnimalDetailViewModel = viewModel(
-       factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
-        // factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
-    )
-    val registerViewModel: RegisterViewModel = viewModel(
-        factory = RegisterViewModelFactory(context.appContainer.provideRepository())
-    )
+    val context = LocalContext.current.applicationContext as KuitApplication
+    val viewModel: AnimalViewModel = hiltViewModel()
+    val detailViewModel : AnimalDetailViewModel = hiltViewModel()
+    val registerViewModel: RegisterViewModel = hiltViewModel()
+
+//    val registerViewModel: RegisterViewModel = viewModel(
+//        factory = RegisterViewModelFactory(context.appContainer.provideRepository())
+//    )
 
     NavHost(
         navController = navController,

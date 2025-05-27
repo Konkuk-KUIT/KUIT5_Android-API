@@ -15,12 +15,15 @@ import com.example.kuitandroidapiexample.data.dto.response.ResponseAnimalDto
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.data.service.AnimalService
 import com.example.kuitandroidapiexample.model.AnimalType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class AnimalViewModel(
+@HiltViewModel
+class AnimalViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
     // private val animalService: AnimalService by lazy { ServicePool.animalService }
@@ -44,13 +47,7 @@ class AnimalViewModel(
 
     }
 
-    class AnimalViewModelFactory(
-        private val animalRepository: AnimalRepository
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>):
-                T = AnimalViewModel(animalRepository) as T
 
-    }
 
 }
 
