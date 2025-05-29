@@ -10,12 +10,15 @@ import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewMod
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.register.addstate.AnimalRegisterAddState
 import com.example.kuitandroidapiexample.ui.register.model.AddAnimalStateType
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnimalRegisterViewModel(
+@HiltViewModel
+class AnimalRegisterViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 
