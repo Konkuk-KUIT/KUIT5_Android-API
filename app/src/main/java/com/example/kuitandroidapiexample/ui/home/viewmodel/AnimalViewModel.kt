@@ -6,12 +6,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.kuitandroidapiexample.data.repository.AnimalRepository
 import com.example.kuitandroidapiexample.ui.home.uistate.AnimalListUiState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AnimalViewModel(
+@HiltViewModel
+class AnimalViewModel @Inject constructor(
     private val animalRepository: AnimalRepository
 ) : ViewModel() {
 //    private val _animalListState = mutableStateOf<BaseResponse<List<ResponseAnimalDto>>?>(null)
@@ -98,9 +101,3 @@ class AnimalViewModel(
 //    }
 }
 
-class AnimalViewModelFactory(
-    private val animalRepository: AnimalRepository
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        AnimalViewModel(animalRepository) as T
-}

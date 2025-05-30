@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
@@ -41,6 +42,7 @@ import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
 import com.example.kuitandroidapiexample.ui.model.AnimalType
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,7 +50,7 @@ fun DetailScreen(
     padding: PaddingValues,
     index: Int,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalDetailViewModel = viewModel()
+    viewModel: AnimalDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 

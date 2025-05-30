@@ -1,6 +1,7 @@
 package com.example.kuitandroidapiexample
 
 import android.os.Bundle
+import android.os.PersistableBundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.example.kuitandroidapiexample.ui.navigation.MainNavHost
 import com.example.kuitandroidapiexample.ui.theme.KuitAndroidApiExampleTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
