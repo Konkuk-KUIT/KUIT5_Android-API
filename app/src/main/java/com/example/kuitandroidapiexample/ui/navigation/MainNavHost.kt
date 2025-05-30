@@ -1,28 +1,24 @@
 package com.example.kuitandroidapiexample.ui.navigation
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHost
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.kuitandroidapiexample.App
+import com.example.kuitandroidapiexample.KuitApplication
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
-import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModelFactory
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
 import com.example.kuitandroidapiexample.ui.home.screen.PreferencesScreen
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModelFactory
 import com.example.kuitandroidapiexample.ui.register.screen.RegisterScreen
 import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModel
 import com.example.kuitandroidapiexample.ui.register.viewmodel.RegisterViewModelFactory
@@ -34,16 +30,11 @@ fun MainNavHost(
 ) {
     val navController = rememberNavController()
 
-    val context = LocalContext.current.applicationContext as App
-    val viewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModelFactory(context.appContainer.provideRepository())
-    )
-    val detailViewModel: AnimalDetailViewModel = viewModel(
-        factory = AnimalDetailViewModelFactory(context.appContainer.provideRepository())
-    )
-    val registerViewModel: RegisterViewModel = viewModel(
-        factory = RegisterViewModelFactory(context.appContainer.provideRepository())
-    )
+    val context = LocalContext.current.applicationContext as KuitApplication
+    val viewModel: AnimalViewModel = hiltViewModel()
+    val detailViewModel: AnimalDetailViewModel = hiltViewModel()
+    val registerViewModel: RegisterViewModel = hiltViewModel()
+
     val scope = rememberCoroutineScope()
     LaunchedEffect(Unit) {
         scope.launch {
