@@ -8,7 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.kuitandroidapiexample.App
+import com.example.kuitandroidapiexample.KuitApplication
 import com.example.kuitandroidapiexample.ui.detail.screen.DetailScreen
 import com.example.kuitandroidapiexample.ui.detail.viewmodel.AnimalDetailViewModel
 import com.example.kuitandroidapiexample.ui.home.screen.HomeScreen
@@ -23,17 +25,11 @@ fun MainNavHost(
 ) {
     val navController = rememberNavController()
 
-    val context = LocalContext.current.applicationContext as App
-    val viewModel: AnimalViewModel = viewModel(
-        factory = AnimalViewModel.AnimalViewModelFactory(context.appContainer.provideRepository())
-    )
-    val detailViewModel: AnimalDetailViewModel = viewModel(
-        factory = AnimalDetailViewModel.AnimalDetailViewModelFactory(context.appContainer.provideRepository())
-    )
+    val context = LocalContext.current.applicationContext as KuitApplication
+    val viewModel: AnimalViewModel = hiltViewModel()
+    val detailViewModel: AnimalDetailViewModel = hiltViewModel()
 
-    val registerViewModel: AnimalRegisterViewModel = viewModel(
-        factory = AnimalRegisterViewModel.AnimalRegisterViewModelFactory(context.appContainer.provideRepository())
-    )
+    val registerViewModel: AnimalRegisterViewModel = hiltViewModel()
 
     NavHost(
         navController = navController,

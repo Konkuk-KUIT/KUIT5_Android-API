@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kuitandroidapiexample.ui.home.viewmodel.AnimalViewModel
@@ -38,7 +39,7 @@ import kotlinx.coroutines.delay
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalRegisterViewModel = viewModel()
+    viewModel: AnimalRegisterViewModel = hiltViewModel()
 ) {
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
