@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "KuitAndroidApiExample"
 include(":app")
- 
+include(":myapplication")
