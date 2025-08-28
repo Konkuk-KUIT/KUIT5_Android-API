@@ -1,4 +1,4 @@
-package com.example.kuitandroidapiexample.register.screen
+package com.example.kuitandroidapiexample.ui.register.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,11 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.kuitandroidapiexample.home.viewmodel.AnimalViewModel
-import com.example.kuitandroidapiexample.model.AnimalType
-import com.example.kuitandroidapiexample.register.componet.FindUTextField
-import com.example.kuitandroidapiexample.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.model.AnimalType
+import com.example.kuitandroidapiexample.ui.register.componet.FindUTextField
+import com.example.kuitandroidapiexample.ui.register.componet.TypeSelectContent
+import com.example.kuitandroidapiexample.ui.register.model.AddAnimalStateType
+import com.example.kuitandroidapiexample.ui.register.viewmodel.AnimalRegisterViewModel
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.colors
 import com.example.kuitandroidapiexample.ui.theme.FindUTheme.typography
 import kotlinx.coroutines.launch
@@ -43,7 +45,7 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
     padding: PaddingValues,
     navigateToBack: () -> Unit = {},
-    viewModel: AnimalViewModel = viewModel()
+    viewModel: AnimalRegisterViewModel = viewModel()
 ) {
     var url by remember { mutableStateOf("") }
     var animalName by remember { mutableStateOf("") }
@@ -51,32 +53,35 @@ fun RegisterScreen(
     var reporterName by remember { mutableStateOf("") }
     var animalType by remember { mutableStateOf(AnimalType.PROTECT) }
 
-    val addAnimal by viewModel.addAnimalState
+    val addAnimal by viewModel.addState.collectAsStateWithLifecycle()
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(addAnimal) {
-        if (addAnimal == true) {
+    LaunchedEffect(addAnimal.addState) {
+        if (addAnimal.addState == AddAnimalStateType.ADDSUCCESS) {
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = "등록 완료",
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-                if (result == SnackbarResult.Dismissed)
+                if (result == SnackbarResult.Dismissed) {
+                    viewModel.resetAddState()
                     navigateToBack()
+                }
             }
-            //navigateToBack()
-        }else if(addAnimal == false){
+        }else if(addAnimal.addState == AddAnimalStateType.ADDFAILURE){
             scope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = "등록 실패",
                     duration = SnackbarDuration.Short,
                     withDismissAction = true
                 )
-                if (result == SnackbarResult.Dismissed)
+                if (result == SnackbarResult.Dismissed) {
+                    viewModel.resetAddState()
                     navigateToBack()
+                }
             }
         }
     }
@@ -98,7 +103,9 @@ fun RegisterScreen(
                 .padding(padding),
         ) {
             Column(
-                modifier = Modifier.matchParentSize().verticalScroll(scrollState)
+                modifier = Modifier
+                    .matchParentSize()
+                    .verticalScroll(scrollState)
             ) {
                 Box(
                     modifier = Modifier
